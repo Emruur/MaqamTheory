@@ -1,0 +1,261 @@
+:root {
+  --ink: #2b2a26;
+  --paper: #faf7f0;
+  --card: #fffdf7;
+  --line: #e4ddcc;
+  --accent: #8a6d3b;
+  --accent-soft: #f3ead8;
+  --red: #a33327;
+}
+
+body.makam-rast     { --accent: #2e7d4f; --accent-soft: #e3f0e8; }
+body.makam-nihavend { --accent: #2f5e8f; --accent-soft: #e3ecf5; }
+body.makam-ussak    { --accent: #b05c2a; --accent-soft: #f7e9de; }
+body.makam-huseyni  { --accent: #6a4d9e; --accent-soft: #ece6f5; }
+body.makam-hicaz    { --accent: #a8322e; --accent-soft: #f7e3e1; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.65 Georgia, "Times New Roman", serif;
+}
+
+header.site {
+  background: var(--card);
+  border-bottom: 3px solid var(--accent);
+  padding: 0.6rem 1.2rem;
+}
+header.site .crumbs {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  font-size: 0.92rem;
+}
+header.site a { color: var(--accent); text-decoration: none; }
+header.site a:hover { text-decoration: underline; }
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1.6rem 1.2rem 4rem;
+}
+
+h1 {
+  font-size: 2.1rem;
+  line-height: 1.2;
+  margin: 0.8rem 0 0.2rem;
+  color: var(--accent);
+}
+h1 .chapter-no {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9a8f77;
+}
+h2 {
+  font-size: 1.45rem;
+  margin-top: 2.4rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 2px solid var(--line);
+  color: #4c4335;
+}
+h3 { font-size: 1.12rem; margin-top: 1.8rem; }
+
+p.lede { font-size: 1.12rem; color: #574e3e; }
+
+em.tr { font-style: italic; }
+strong { color: #1e1d1a; }
+
+a { color: var(--accent); }
+
+figure {
+  margin: 1.4rem 0;
+  padding: 0.9rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+figure img { display: block; max-width: 100%; }
+figure figcaption {
+  font-size: 0.88rem;
+  color: #7c7260;
+  margin-top: 0.55rem;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 1.3rem 0;
+  width: 100%;
+  font-size: 0.95rem;
+  background: var(--card);
+}
+th, td {
+  border: 1px solid var(--line);
+  padding: 0.45rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--accent-soft); font-weight: 600; }
+
+.callout {
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 0.8rem 1rem;
+  margin: 1.4rem 0;
+  font-size: 0.97rem;
+}
+.callout .label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+
+/* ---- audio players ---- */
+button.play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font: 600 0.95rem/1 Georgia, serif;
+  color: var(--card);
+  background: var(--accent);
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  margin: 0.25rem 0.35rem 0.25rem 0;
+  cursor: pointer;
+  transition: transform 0.06s ease, opacity 0.15s;
+}
+button.play:hover { opacity: 0.88; }
+button.play:active { transform: scale(0.97); }
+button.play::before { content: "\25B6\00a0"; font-size: 0.8em; }
+button.play.playing { background: var(--red); }
+button.play.playing::before { content: "\25A0\00a0"; }
+
+.player-row { margin: 1rem 0; }
+
+/* ---- clickable scale notes ---- */
+.scale-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 1.1rem 0;
+}
+.note-chip {
+  min-width: 4.6rem;
+  text-align: center;
+  background: var(--card);
+  border: 1.5px solid var(--accent);
+  border-radius: 9px;
+  padding: 0.45rem 0.55rem 0.4rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.12s;
+  line-height: 1.25;
+}
+.note-chip:hover { background: var(--accent-soft); }
+.note-chip.sounding { background: var(--accent); color: var(--card); }
+.note-chip .perde {
+  display: block;
+  font-style: italic;
+  font-size: 0.88rem;
+}
+.note-chip .western {
+  display: block;
+  font-size: 0.78rem;
+  color: #8d8878;
+}
+.note-chip.sounding .western { color: var(--accent-soft); }
+.note-chip.tonic { border-width: 3px; }
+
+/* ---- index / table of contents ---- */
+.toc { list-style: none; padding: 0; margin: 1.6rem 0; }
+.toc li { margin: 0; }
+.toc a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin-bottom: 0.55rem;
+  background: var(--card);
+  text-decoration: none;
+  color: var(--ink);
+}
+.toc a:hover { border-color: var(--accent); background: var(--accent-soft); }
+.toc .no {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 1.6rem;
+}
+.toc .what { font-size: 0.88rem; color: #7c7260; margin-left: auto; text-align: right; }
+
+/* ---- pager ---- */
+nav.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3.2rem;
+  padding-top: 1.1rem;
+  border-top: 2px solid var(--line);
+  font-size: 0.95rem;
+}
+nav.pager a {
+  text-decoration: none;
+  color: var(--accent);
+  max-width: 46%;
+}
+nav.pager a:hover { text-decoration: underline; }
+nav.pager .dir {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9a8f77;
+}
+
+/* ---- quiz ---- */
+.quiz-box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 1.2rem 1.3rem;
+  margin: 1.5rem 0;
+}
+.quiz-choices { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.9rem 0; }
+.quiz-choices button {
+  font: 600 1rem Georgia, serif;
+  padding: 0.55rem 1.15rem;
+  border: 1.6px solid var(--accent);
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.quiz-choices button:hover:not(:disabled) { background: var(--accent-soft); }
+.quiz-choices button:disabled { opacity: 0.45; cursor: default; }
+.quiz-choices button.correct { background: #2e7d4f; border-color: #2e7d4f; color: #fff; }
+.quiz-choices button.wrong { background: var(--red); border-color: var(--red); color: #fff; }
+.quiz-status { font-size: 0.95rem; color: #574e3e; min-height: 1.4em; }
+.quiz-score { font-weight: 700; color: var(--accent); }
+
+footer.site {
+  text-align: center;
+  font-size: 0.82rem;
+  color: #9a8f77;
+  padding: 1.4rem 0 2.2rem;
+}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03 · Reading Turkish Sheet Music — Makam Theory</title>
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+<header class="site">
+  <div class="crumbs"><a href="../index.html">Makam Theory</a><span>Chapter 3 of 10</span></div>
+</header>
+<main>
+  <h1><span class="chapter-no">Chapter 03</span>Reading Turkish Sheet Music</h1>
+
+  <p class="lede">Turkish makam music is written on the ordinary five-line staff
+  with a treble clef — you already know how to read that. What's new is a set of
+  microtonal accidentals, a system of Ottoman note names, and one surprising
+  convention about what pitch the written notes actually sound at.</p>
+
+  <h2>Perde: every note has a name</h2>
+  <p>Where Western musicians say “A” or “B♭,” Turkish musicians name each pitch
+  with an Ottoman word: <em class="tr">perde</em> means fret, or pitch-step. These
+  names matter because makams are described in terms of them (“Uşşak begins on
+  <em class="tr">dügâh</em> and shows <em class="tr">segâh</em>…”). Here is the
+  ladder of perde names you will meet in this course, from <em class="tr">rast</em>
+  (written G) up to <em class="tr">muhayyer</em> (written high A):</p>
+
+  <figure>
+    <img src="../img/perde_ladder.svg" alt="Staff showing the perde names from rast to muhayyer with their accidentals">
+    <figcaption>The main perdeler of this course. Note that some occupy positions between
+    Western notes — segâh is one comma below B, dik kürdî four commas below.</figcaption>
+  </figure>
+  <div class="player-row">
+    <button class="play" data-audio="../audio/demo_perde_ladder.wav">Play the whole perde ladder</button>
+  </div>
+
+  <p>A few of these deserve flash-card status right away:</p>
+  <table>
+    <tr><th>Perde</th><th>Written</th><th>Why it matters</th></tr>
+    <tr><td><em class="tr">rast</em></td><td>G</td><td>Tonic of Rast and Nihavend.</td></tr>
+    <tr><td><em class="tr">dügâh</em></td><td>A</td><td>Tonic of Uşşak, Hüseyni, and Hicaz.</td></tr>
+    <tr><td><em class="tr">segâh</em></td><td>B −1 koma</td><td>The signature “in-between” third of Rast; second of Uşşak/Hüseyni.</td></tr>
+    <tr><td><em class="tr">çargâh</em></td><td>C</td><td>A frequent resting point.</td></tr>
+    <tr><td><em class="tr">nevâ</em></td><td>D</td><td>Güçlü (dominant) of Rast, Nihavend, Uşşak, Hicaz.</td></tr>
+    <tr><td><em class="tr">hüseynî</em></td><td>E</td><td>Güçlü of makam Hüseyni, and its namesake.</td></tr>
+    <tr><td><em class="tr">eviç</em></td><td>F♯ (bakiye)</td><td>The bright leading region of Rast and Hüseyni.</td></tr>
+    <tr><td><em class="tr">acem</em></td><td>F♮</td><td>Replaces eviç when melodies descend in Rast.</td></tr>
+    <tr><td><em class="tr">gerdaniye</em></td><td>G′</td><td>Octave of rast.</td></tr>
+    <tr><td><em class="tr">muhayyer</em></td><td>A′</td><td>Octave of dügâh.</td></tr>
+  </table>
+
+  <div class="callout"><span class="label">Octave naming</span>
+  Perde names are register-specific: A an octave above dügâh is not “dügâh again”
+  but <em class="tr">muhayyer</em>; high B −1 koma is <em class="tr">tiz segâh</em>.
+  Below rast, the names continue downward too (<em class="tr">ırak</em>,
+  <em class="tr">acem aşiran</em>, <em class="tr">yegâh</em>…). In practice you'll
+  absorb them makam by makam.</div>
+
+  <h2>The AEU accidentals</h2>
+  <p>Turkish notation modifies notes by <em>specific numbers of commas</em>, and each
+  amount has its own symbol. Four sharps and four flats cover everything in this course:</p>
+
+  <figure>
+    <img src="../img/accidentals_table.svg" alt="The eight AEU accidentals with names and comma values">
+    <figcaption>The AEU accidental set. Note the logic: the 1-koma flat is a
+    <em>mirrored</em> flat; the 4-koma bakiye flat is a flat with a slash; the plain-looking
+    flat and sharp are the 5-koma küçük mücenneb flat and 4-koma bakiye sharp.</figcaption>
+  </figure>
+
+  <table>
+    <tr><th>Symbol</th><th>Name</th><th>Alters by</th><th>You'll see it on…</th></tr>
+    <tr><td>mirrored ♭</td><td><em class="tr">koma bemolü</em></td><td>−1 koma</td><td>segâh (B), eviç region — the Rast/Uşşak/Hüseyni key signatures</td></tr>
+    <tr><td>♭ with slash</td><td><em class="tr">bakiye bemolü</em></td><td>−4 koma</td><td>dik kürdî (B) in the Hicaz key signature</td></tr>
+    <tr><td>plain ♭</td><td><em class="tr">küçük mücenneb bemolü</em></td><td>−5 koma</td><td>kürdî (B♭) and nim hisar (E♭) in Nihavend</td></tr>
+    <tr><td>♭ with two slashes</td><td><em class="tr">büyük mücenneb bemolü</em></td><td>−8 koma</td><td>rare; other makams</td></tr>
+    <tr><td>sharp, one vertical stroke</td><td><em class="tr">koma diyezi</em></td><td>+1 koma</td><td>occasional raised inflections</td></tr>
+    <tr><td>plain ♯</td><td><em class="tr">bakiye diyezi</em></td><td>+4 koma</td><td>eviç (F♯), nim hicaz (C♯) — very common</td></tr>
+    <tr><td>one-stroke ♯ with slash</td><td><em class="tr">küçük mücenneb diyezi</em></td><td>+5 koma</td><td>hicaz (C♯) in some makams</td></tr>
+    <tr><td>♯ with slash</td><td><em class="tr">büyük mücenneb diyezi</em></td><td>+8 koma</td><td>rare; other makams</td></tr>
+  </table>
+
+  <div class="callout"><span class="label">The crucial trap</span>
+  A plain-looking ♯ in Turkish music raises by 4 commas, not by a full Western
+  semitone (which would be ~4.4 commas); a plain-looking ♭ lowers by 5. So
+  Turkish F♯ (eviç) is slightly <em>lower</em> than a piano's F♯, and Turkish
+  B♭ (kürdî) is slightly lower than a piano's B♭. Close enough to feel familiar —
+  far enough to matter.</div>
+
+  <h2>Key signatures</h2>
+  <p>Turkish key signatures work like Western ones — the accidentals at the start
+  of the line apply throughout — but they use AEU symbols and don't correspond to
+  major/minor keys. A reader identifies the makam from the signature plus the
+  final note. The signatures of our five:</p>
+
+  <table>
+    <tr><th>Makam</th><th>Signature</th><th>Meaning</th></tr>
+    <tr><td>Rast</td><td><img src="../img/keysig_rast.svg" alt="Rast key signature" style="height:64px;vertical-align:middle"></td><td>B −1 koma (segâh) and F +4 (eviç)</td></tr>
+    <tr><td>Nihavend</td><td><img src="../img/keysig_nihavend.svg" alt="Nihavend key signature" style="height:64px;vertical-align:middle"></td><td>B♭ and E♭ (both −5); F♯ appears inside the music</td></tr>
+    <tr><td>Uşşak</td><td><img src="../img/keysig_ussak.svg" alt="Ussak key signature" style="height:64px;vertical-align:middle"></td><td>B −1 koma (segâh) only</td></tr>
+    <tr><td>Hüseyni</td><td><img src="../img/keysig_huseyni.svg" alt="Huseyni key signature" style="height:64px;vertical-align:middle"></td><td>B −1 koma (segâh) and F +4 (eviç)</td></tr>
+    <tr><td>Hicaz</td><td><img src="../img/keysig_hicaz.svg" alt="Hicaz key signature" style="height:64px;vertical-align:middle"></td><td>B −4 koma (dik kürdî) and C +4 (nim hicaz)</td></tr>
+  </table>
+  <p>Notice that Rast and Hüseyni share a signature. On paper they are distinguished
+  by their final: a piece ending on G is Rast; ending on A, Hüseyni (or Uşşak's
+  cousin family). This is normal — the signature narrows the field, the cadence
+  decides.</p>
+
+  <h2>Written pitch vs. sounding pitch: ahenk</h2>
+  <p>Here is the convention that surprises Western readers most. Turkish notation
+  is <strong>written at a fixed reference, but performed at whatever transposition
+  suits the instruments and voices</strong>. The transposition standard is called
+  <em class="tr">ahenk</em>. At the common <em class="tr">bolahenk</em> ahenk,
+  everything sounds a perfect fourth lower than written
+  (written rast G sounds as D); at <em class="tr">mansur</em> ahenk it
+  sounds as written; singers pick whatever serves the voice. The notation —
+  and the makam analysis — never changes; only the absolute pitch does.</p>
+  <p>All audio on this site plays at <strong>written pitch</strong>
+  (A = 440 Hz), which keeps what you hear locked to what you see.</p>
+
+  <h2>Rhythm: usul</h2>
+  <p>Makam governs melody; rhythm is governed by a parallel system of cycles called
+  <em class="tr">usul</em> — patterns of strong (<em class="tr">düm</em>) and weak
+  (<em class="tr">tek</em>) strokes. Simple songs use short cycles like
+  <em class="tr">nim sofyan</em> (2/4), <em class="tr">sofyan</em> (4/4), or the
+  limping <em class="tr">aksak</em> (9/8 = 2+2+2+3); classical forms use cycles up
+  to 28 beats and beyond. Time signatures and note durations on the page read
+  exactly as in Western notation, so nothing new is needed to start; just know
+  the word <em class="tr">usul</em> when you see it on a score.</p>
+
+  <h2>Reading practice, chapter by chapter</h2>
+  <p>Each makam chapter ahead contains a fully notated <em>seyir sketch</em> with
+  matching audio. Read along while listening; that pairing — eye on the AEU
+  accidentals, ear on the commas — is the fastest way to make Turkish notation
+  feel native. Here's the one you already heard in Chapter 1:</p>
+  <figure>
+    <img src="../img/seyir_rast.svg" alt="Notated seyir sketch of makam Rast">
+    <figcaption>Rast seyir sketch. Signature: segâh (mirrored flat on B) + eviç (sharp on F).
+    Note the F♮ (natural sign) where the melody descends through acem.</figcaption>
+  </figure>
+  <div class="player-row">
+    <button class="play" data-audio="../audio/rast_seyir.wav">Play while you read</button>
+  </div>
+
+  <nav class="pager">
+    <a href="02-commas-and-intervals.html"><span class="dir">Previous</span>02 · The Comma</a>
+    <a href="04-building-blocks.html" style="text-align:right"><span class="dir">Next</span>04 · Building Blocks: Dörtlü &amp; Beşli</a>
+  </nav>
+</main>
+<footer class="site">Makam Theory — a listening course</footer>
+<script src="../js/player.js"></script>
+</body>
+</html>
