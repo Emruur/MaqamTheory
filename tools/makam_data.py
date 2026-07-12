@@ -169,6 +169,150 @@ MAKAMLAR = {
 
 MAKAM_ORDER = ["rast", "nihavend", "ussak", "huseyni", "hicaz"]
 
+# Song excerpts, transcribed from the SymbTr-derived ABC corpus
+# (Turkish Makam Database, ifdo.ca/~seymour/runabc/makams). Events are
+# (commas, beats); None = rest. Ornaments/32nds simplified to 16th resolution.
+SONGS = {
+    "rast": {
+        "title": "Yine Bir Gülnihal",
+        "credit": "Hammâmîzâde İsmail Dede Efendi · Rast şarkı, semâî (3/4)",
+        "bpm": 138,
+        "beats_per_bar": 3,
+        "events": [
+            # "Yine bir gülnihal aldı bu gönlümü" (with both endings)
+            (31, 2), (48, 1), (40, 3), (9, 1), (18, 1), (26, 1),
+            (31, 2), (None, 1),
+            (31, 2), (48, 1), (40, 3), (40, 1), (48, 1), (53, 1),
+            (48, 2), (None, 1),
+            # "Simüten gonca fem bî bedel ol güzel"
+            (53, 2), (71, 1), (62, 1), (53, 1), (48, 1),
+            (40, 1), (48, 1), (53, 1), (48, 2), (None, 1),
+            (31, 2), (48, 1), (40, 3), (9, 1), (18, 1), (26, 1),
+            (31, 2), (None, 1),
+        ],
+    },
+    "nihavend": {
+        "title": "Kâtibim (Üsküdar'a Gider İken)",
+        "credit": "Anonymous İstanbul türküsü · nim sofyan (2/4)",
+        "bpm": 88,
+        "beats_per_bar": 2,
+        "events": [
+            # "Üsküdar'a gider iken aldı da bir yağmur"
+            (31, 0.75), (62, 0.25), (62, 0.5), (62, 0.5),
+            (66, 0.25), (62, 0.25), (66, 0.25), (75, 0.25), (62, 0.5), (62, 0.5),
+            (53, 0.5), (53, 0.25), (53, 0.25), (44, 0.5), (53, 0.5),
+            (62, 0.25), (66, 0.25), (62, 0.25), (53, 0.25),
+            (44, 0.25), (40, 0.25), (31, 0.5),
+            # "Kâtibimin setresi uzun eteği çamur"
+            (31, 0.75), (40, 0.25), (44, 0.5), (53, 0.5),
+            (62, 0.25), (66, 0.25), (62, 0.25), (53, 0.25),
+            (44, 0.25), (40, 0.25), (31, 0.5),
+            (40, 0.25), (53, 0.25), (44, 0.25), (40, 0.25),
+            (40, 0.25), (31, 0.25), (31, 0.25), (26, 0.25),
+            (31, 2),
+        ],
+    },
+    "ussak": {
+        "title": "Uzun İnce Bir Yoldayım",
+        "credit": "Âşık Veysel · Uşşak türkü, sofyan (4/4) — simplified skeleton",
+        "bpm": 76,
+        "beats_per_bar": 4,
+        "events": [
+            # "Uzun ince bir yoldayım"
+            (62, 0.5), (53, 0.25), (62, 0.25), (62, 0.5), (53, 0.25), (40, 0.25),
+            (53, 0.25), (48, 0.5), (40, 0.25), (48, 0.25), (31, 0.25), (40, 0.5),
+            # "Bilmiyorum ne haldayım" (high phrase)
+            (84, 0.5), (79, 0.25), (84, 0.25), (84, 0.75), (84, 0.25),
+            (84, 0.25), (75, 0.5), (71, 0.25), (84, 0.25), (75, 0.25), (75, 0.5),
+            (79, 0.25), (71, 0.5), (62, 0.25), (75, 0.25), (71, 0.25), (71, 0.5),
+            (71, 0.25), (62, 0.25), (62, 0.25), (53, 0.25),
+            (71, 0.25), (62, 0.25), (62, 0.5),
+            # "Gidiyorum gündüz gece"
+            (62, 0.5), (53, 0.25), (48, 0.25), (40, 0.5), (62, 0.25), (48, 0.25),
+            (53, 0.5), (53, 0.25), (48, 0.25), (40, 0.5),
+            (53, 0.25), (48, 0.25),
+            (48, 0.25), (40, 0.25), (40, 0.25), (31, 0.25),
+            (48, 0.25), (40, 0.25), (40, 0.5), (40, 2),
+        ],
+    },
+    "huseyni": {
+        "title": "Çanakkale İçinde",
+        "credit": "İhsan Ozanoğlu / anonymous · catalogued as Nevâ türkü, sofyan (4/4)",
+        "bpm": 93,
+        "beats_per_bar": 4,
+        "events": [
+            # "Çanakkale içinde vurdular beni"
+            (None, 1), (31, 0.5), (40, 0.5), (40, 0.5), (40, 1.5),
+            (84, 0.75), (79, 0.25), (71, 0.75), (62, 0.25), (62, 1.5), (53, 0.5),
+            (62, 1), (71, 1), (71, 0.25), (84, 0.25), (79, 0.25), (84, 0.25),
+            (71, 0.75), (62, 0.25),
+            (62, 2), (62, 1), (None, 1),
+            # "Ölmeden mezara koydular beni / Of gençliğim eyvah"
+            (62, 1.5), (71, 0.5), (71, 1), (66, 0.75), (62, 0.25),
+            (62, 1), (66, 0.5), (62, 0.5), (53, 0.5), (48, 0.5), (53, 1),
+            (48, 0.5), (53, 0.5), (62, 1), (62, 0.25), (66, 0.25), (62, 0.25),
+            (71, 0.25), (53, 0.5), (48, 0.5),
+            (40, 2), (48, 0.5), (53, 0.5), (62, 0.5), (71, 0.5),
+            (53, 0.5), (48, 0.75), (31, 0.25), (40, 0.5), (48, 0.5), (40, 1.5),
+            (40, 2), (40, 1), (None, 1),
+        ],
+    },
+    "hicaz": {
+        "title": "Ada Sahillerinde Bekliyorum",
+        "credit": "Anonymous İstanbul kantosu · Hicaz, sofyan (4/4) — simplified",
+        "bpm": 80,
+        "beats_per_bar": 4,
+        "events": [
+            # "Ah — Adalar sahilinde bekliyorum"
+            (40, 0.5), (93, 3.5),
+            (93, 1), (84, 0.5), (93, 0.5), (93, 1), (93, 1),
+            (93, 0.25), (84, 0.25), (93, 0.25), (102, 0.25), (93, 0.5), (84, 0.5),
+            (79, 0.5), (79, 0.25), (71, 0.25), (84, 0.5), (84, 0.25), (79, 0.25),
+            # "Seni yârim serian istiyorum"
+            (71, 1), (71, 0.5), (79, 0.5), (84, 0.5), (93, 0.5),
+            (84, 0.25), (79, 0.25), (71, 0.5),
+            (79, 0.5), (84, 0.25), (93, 0.25), (84, 0.25), (75, 0.25),
+            (71, 0.25), (62, 0.25), (71, 0.5), (79, 0.5),
+            (93, 0.25), (84, 0.25), (79, 0.25), (71, 0.25),
+            # "Her zamanki yerimde bekliyorum"
+            (62, 1), (71, 0.5), (75, 0.5), (75, 0.5), (75, 0.25), (71, 0.25), (75, 1),
+            (71, 0.5), (75, 0.25), (84, 0.25), (75, 0.25), (71, 0.25),
+            (62, 0.5), (57, 0.5), (62, 0.5),
+            (71, 0.25), (75, 0.25), (71, 0.25), (62, 0.25),
+            # "Beni şâd et Şâdiye başın için"
+            (57, 1), (57, 0.5), (62, 0.5), (67, 0.75), (62, 0.25), (62, 0.75), (57, 0.25),
+            (57, 0.75), (45, 0.25), (40, 0.5), (45, 0.5), (57, 0.5), (62, 0.5),
+            (71, 0.25), (62, 0.25), (57, 0.25), (45, 0.25),
+            (40, 3), (None, 1),
+        ],
+    },
+}
+
+# Keyboard-instrument note sets: ~1.5 octaves per makam (yeden below the
+# tonic up past the octave), flags: t=tonic/octave, g=guclu, y=yeden.
+KEYBOARD = {
+    "rast": [(26, "ırak", "y"), (31, "rast", "t"), (40, "dügâh", ""),
+             (48, "segâh", ""), (53, "çargâh", ""), (62, "nevâ", "g"),
+             (71, "hüseynî", ""), (75, "acem", ""), (79, "eviç", ""),
+             (84, "gerdaniye", "t"), (93, "muhayyer", "")],
+    "nihavend": [(26, "F♯ yeden", "y"), (31, "rast", "t"), (40, "dügâh", ""),
+                 (44, "kürdî", ""), (53, "çargâh", ""), (62, "nevâ", "g"),
+                 (66, "nim hisar", ""), (75, "acem", ""), (79, "eviç", ""),
+                 (84, "gerdaniye", "t"), (93, "muhayyer", "")],
+    "ussak": [(31, "rast", "y"), (40, "dügâh", "t"), (48, "segâh", ""),
+              (53, "çargâh", ""), (62, "nevâ", "g"), (71, "hüseynî", ""),
+              (75, "acem", ""), (84, "gerdaniye", ""), (93, "muhayyer", "t"),
+              (101, "tiz segâh", ""), (106, "tiz çargâh", "")],
+    "huseyni": [(31, "rast", "y"), (40, "dügâh", "t"), (48, "segâh", ""),
+                (53, "çargâh", ""), (62, "nevâ", ""), (71, "hüseynî", "g"),
+                (79, "eviç", ""), (84, "gerdaniye", ""), (93, "muhayyer", "t"),
+                (101, "tiz segâh", ""), (106, "tiz çargâh", "")],
+    "hicaz": [(31, "rast", "y"), (40, "dügâh", "t"), (45, "dik kürdî", ""),
+              (57, "nim hicaz", ""), (62, "nevâ", "g"), (71, "hüseynî", ""),
+              (79, "eviç", ""), (84, "gerdaniye", ""), (93, "muhayyer", "t"),
+              (98, "tiz dik kürdî", ""), (106, "tiz çargâh", "")],
+}
+
 # Comparison genera for chapter 4: every genus type played from dugah (A4).
 GENUS_DEMOS = {
     "cargah": ("cargah dortlusu", PERDE["dugah"]),
@@ -203,6 +347,22 @@ def check() -> None:
         assert genus_pitches == m["asc"][: len(genus_pitches)], (
             f"{key}: lower genus {genus_pitches} does not match scale {m['asc']}"
         )
+
+    for key, song in SONGS.items():
+        assert key in MAKAMLAR, f"song for unknown makam {key}"
+        total = sum(b for _, b in song["events"])
+        bpb = song["beats_per_bar"]
+        assert abs(total / bpb - round(total / bpb)) < 1e-9, (
+            f"{key} song: {total} beats does not fill whole {bpb}-beat bars")
+        used = {c for c, _ in song["events"] if c is not None}
+        allowed = set(MAKAMLAR[key]["asc"]) | set(MAKAMLAR[key]["desc"])
+        allowed |= {MAKAMLAR[key]["yeden"]}
+        # Known extras: low-register notes (9,18,26), chromatic passing/color
+        # tones (57,67,102), and evic 79 in Ussak folk practice (Huseyni drift).
+        # (66 = nim hisar colour in the Canakkale refrain; 75 = descending
+        # acem in the Hicaz kanto, mirroring Rast's evic->acem swap.)
+        extras = used - allowed - {9, 18, 26, 57, 66, 67, 75, 79, 102}
+        assert not extras, f"{key} song: unexpected pitches {sorted(extras)}"
 
     # A couple of frequency spot checks.
     assert abs(freq(40) - 440.0) < 1e-9, "dugah (A4) must be 440 Hz"

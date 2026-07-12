@@ -180,6 +180,55 @@ button.play.playing::before { content: "\25A0\00a0"; }
 .note-chip.sounding .western { color: var(--accent-soft); }
 .note-chip.tonic { border-width: 3px; }
 
+/* ---- keyboard instrument ---- */
+.kbd-instrument {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.2rem 0;
+}
+.kbd-key {
+  flex: 1 0 auto;
+  min-width: 4.2rem;
+  text-align: center;
+  background: var(--card);
+  border: 1.5px solid var(--accent);
+  border-bottom-width: 4px;
+  border-radius: 10px;
+  padding: 0.5rem 0.4rem 0.55rem;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: background 0.08s, transform 0.05s;
+}
+.kbd-key .cap {
+  display: inline-block;
+  font: 700 0.78rem ui-monospace, Menlo, monospace;
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0.08rem 0.45rem;
+  margin-bottom: 0.3rem;
+}
+.kbd-key .perde {
+  display: block;
+  font-style: italic;
+  font-size: 0.84rem;
+  line-height: 1.2;
+}
+.kbd-key.active {
+  background: var(--accent);
+  color: var(--card);
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+.kbd-key.active .cap { background: var(--accent); color: var(--card); }
+.kbd-key.tonic { border-width: 3px; border-bottom-width: 5px; }
+.kbd-key.guclu { border-style: double; border-width: 3.5px; }
+.kbd-key.yeden { border-style: dashed; }
+.kbd-legend { font-size: 0.85rem; color: #7c7260; margin-top: 0.2rem; }
+
 /* ---- index / table of contents ---- */
 .toc { list-style: none; padding: 0; margin: 1.6rem 0; }
 .toc li { margin: 0; }

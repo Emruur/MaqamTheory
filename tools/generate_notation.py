@@ -46,6 +46,7 @@ SPELL = {
     93: ("A", 5, None),
     97: ("B", 5, "flat5"),
     101: ("B", 5, "flat1"),
+    102: ("B", 5, None),
     106: ("C", 6, None),
 }
 
@@ -109,6 +110,12 @@ class SVG:
             f'<text x="{x:.1f}" y="{y:.1f}" font-size="{size}" '
             f'text-anchor="{anchor}" fill="{color}" font-weight="{weight}" '
             f'style="{style}">{s}</text>')
+
+    def begin_group(self, ty):
+        self.parts.append(f'<g transform="translate(0 {ty:.1f})">')
+
+    def end_group(self):
+        self.parts.append("</g>")
 
     def save(self, name):
         OUT.mkdir(exist_ok=True)
@@ -276,55 +283,98 @@ def genus_svg(name, genus_name, root, label):
     scale_svg(name, pitches, [], title=label, inline_all=True)
 
 
-def melody_svg(name, events, keysig, title=None):
-    """Rhythmic melody line (seyir demo): filled heads, stems, flags, dots.
+def draw_rest(svg: SVG, x, y=20):
+    """Simple stylized quarter/eighth rest squiggle on the middle of the staff."""
+    svg.path(f"M {x-2.5} {y-8} L {x+2.5} {y-2} C {x-2} {y+2} {x-2} {y+4} "
+             f"{x+2} {y+8}", w=2.0)
 
-    events: list of (commas, beats) with beats in {0.5, 1, 1.5, 2}.
-    Drawn without barlines, like a free-flowing seyir sketch.
+
+def draw_note(svg: SVG, cx, commas, beats, sig_acc):
+    """One rhythmic note. Returns nothing. Supports 0.25..3.5 beats."""
+    letter, octv, acc = SPELL[commas]
+    step = step_of(letter, octv)
+    y = y_of(step)
+    if acc != sig_acc.get(letter) and (acc or letter in sig_acc):
+        draw_accidental(svg, acc or "natural", cx - 13, y)
+    draw_ledger(svg, cx, step)
+    hollow = beats >= 2
+    if hollow:
+        svg.ellipse(cx, y, 5.6, 4.1, rot=-16, fill="#fffdf7",
+                    stroke="#2b2b2b", sw=1.9)
+    else:
+        svg.ellipse(cx, y, 5.4, 4.0, rot=-16, fill="#2b2b2b")
+    stem_up = step < 8
+    if stem_up:
+        sx, sy1, sy2 = cx + 5.2, y - 1.5, y - 30
+    else:
+        sx, sy1, sy2 = cx - 5.2, y + 1.5, y + 30
+    svg.line(sx, sy1, sx, sy2, w=1.4)
+    d = 1 if stem_up else -1
+    nflags = 2 if beats == 0.25 else (1 if beats in (0.5, 0.75) else 0)
+    for f in range(nflags):
+        fy = sy2 + f * 7 * d
+        svg.path(f"M {sx} {fy} C {sx+7} {fy + 6*d} {sx+4} {fy + 12*d} "
+                 f"{sx+6.5} {fy + 17*d}", w=1.7)
+    if beats in (0.75, 1.5, 3, 3.5):
+        dot_y = y - 3 if step % 2 == 0 else y
+        svg.ellipse(cx + 9.5, dot_y, 1.7, 1.7, fill="#2b2b2b")
+
+
+def melody_svg(name, events, keysig, title=None, beats_per_bar=None,
+               max_slots=18, note_dx=34):
+    """Rhythmic melody, wrapped into multiple staff systems.
+
+    events: (commas, beats); None commas = rest. Barlines drawn when
+    beats_per_bar is given. Systems break at barlines after ~max_slots notes.
     """
-    note_dx = 34
-    x_notes = 40 + 30 + 18 * len(keysig) + 22
-    notes = [(c, b) for c, b in events if c is not None]
-    width = x_notes + len(notes) * note_dx + 14
-    svg = SVG(width, 118, ox=6, oy=30)
-    draw_staff(svg, 0, width - 14)
-    draw_clef(svg, 14)
-
-    sig_acc = {}
-    x = 42
-    for (commas,) in keysig:
-        letter, octv, acc = SPELL[commas]
-        sig_acc[letter] = acc
-        draw_accidental(svg, acc, x, y_of(step_of(letter, octv)))
-        x += 17
-
-    for i, (commas, beats) in enumerate(notes):
-        letter, octv, acc = SPELL[commas]
-        cx = x_notes + i * note_dx
-        step = step_of(letter, octv)
-        y = y_of(step)
-        if acc != sig_acc.get(letter) and (acc or letter in sig_acc):
-            draw_accidental(svg, acc or "natural", cx - 13, y)
-        draw_ledger(svg, cx, step)
-        hollow = beats >= 2
-        if hollow:
-            svg.ellipse(cx, y, 5.6, 4.1, rot=-16, fill="#fffdf7",
-                        stroke="#2b2b2b", sw=1.9)
+    # Split events into systems, breaking at barlines where possible.
+    systems, cur, cum = [], [], 0.0
+    for commas, beats in events:
+        cur.append((commas, beats, cum))
+        cum += beats
+        at_bar = beats_per_bar and abs(cum % beats_per_bar) < 1e-6
+        if len(cur) >= max_slots and (at_bar or not beats_per_bar or
+                                      len(cur) >= max_slots + 6):
+            systems.append(cur)
+            cur = []
+    if cur:
+        if systems and len(cur) <= 3:
+            systems[-1].extend(cur)
         else:
-            svg.ellipse(cx, y, 5.4, 4.0, rot=-16, fill="#2b2b2b")
-        stem_up = step < 8          # below B4/middle area -> stem up
-        if stem_up:
-            sx, sy1, sy2 = cx + 5.2, y - 1.5, y - 30
-        else:
-            sx, sy1, sy2 = cx - 5.2, y + 1.5, y + 30
-        svg.line(sx, sy1, sx, sy2, w=1.4)
-        if beats == 0.5:            # eighth-note flag
-            d = 1 if stem_up else -1
-            svg.path(f"M {sx} {sy2} C {sx+7} {sy2 + 6*d} {sx+4} {sy2 + 12*d} "
-                     f"{sx+6.5} {sy2 + 17*d}", w=1.7)
-        if beats == 1.5:            # augmentation dot
-            dot_y = y - 3 if step % 2 == 0 else y
-            svg.ellipse(cx + 9.5, dot_y, 1.7, 1.7, fill="#2b2b2b")
+            systems.append(cur)
+
+    sys_h = 128
+    x_head = 40 + 18 * len(keysig) + 24
+    n_widest = max(len(s) for s in systems)
+    width = x_head + n_widest * note_dx + 16
+    svg = SVG(width, sys_h * len(systems) + 34, ox=6, oy=30)
+
+    for si, sys_events in enumerate(systems):
+        ty = si * sys_h
+        svg.begin_group(ty)
+        sys_w = x_head + len(sys_events) * note_dx - 4
+        draw_staff(svg, 0, sys_w)
+        draw_clef(svg, 14)
+        sig_acc = {}
+        x = 42
+        for (commas,) in keysig:
+            letter, octv, acc = SPELL[commas]
+            sig_acc[letter] = acc
+            draw_accidental(svg, acc, x, y_of(step_of(letter, octv)))
+            x += 17
+        for i, (commas, beats, start) in enumerate(sys_events):
+            cx = x_head + i * note_dx
+            if commas is None:
+                draw_rest(svg, cx)
+            else:
+                draw_note(svg, cx, commas, beats, sig_acc)
+            end = start + beats
+            if beats_per_bar and abs(end % beats_per_bar) < 1e-6:
+                bx = cx + note_dx / 2 + 3
+                if i == len(sys_events) - 1:
+                    bx = cx + note_dx / 2 + 6
+                svg.line(bx, 0, bx, 40, w=1.2, color="#777")
+        svg.end_group()
     if title:
         svg.text(0, -18, title, size=13, anchor="start", color="#333",
                  weight="bold")
@@ -418,6 +468,11 @@ def main():
     for key, m in md.MAKAMLAR.items():
         melody_svg(f"seyir_{key}.svg", m["seyir"], KEY_SIGNATURES[key],
                    title=f"{m['title']} seyir sketch")
+
+    for key, song in md.SONGS.items():
+        melody_svg(f"song_{key}.svg", song["events"], KEY_SIGNATURES[key],
+                   title=song["title"],
+                   beats_per_bar=song["beats_per_bar"], note_dx=32)
 
     accidental_table_svg()
     perde_ladder_svg()

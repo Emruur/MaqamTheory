@@ -4,6 +4,13 @@ A self-contained static website for learning Turkish makam theory (Rast,
 Nihavend, Uşşak, Hüseyni, Hicaz) with synthesized microtonal audio and staff
 notation using authentic Arel–Ezgi–Uzdilek (AEU) accidentals.
 
+Each makam chapter also includes a **live keyboard instrument** (home-row keys
+A S D F… play the makam's perdeler via Web Audio at exact comma pitches) and a
+**notated song excerpt** with matching audio (Kâtibim, Yine Bir Gülnihal, Uzun
+İnce Bir Yoldayım, Çanakkale İçinde, Ada Sahillerinde), transcribed from the
+SymbTr-derived ABC corpus of the Turkish Makam Database
+(ifdo.ca/~seymour/runabc/makams).
+
 ## Using the site
 
 Open `index.html` directly in a browser, or serve it:

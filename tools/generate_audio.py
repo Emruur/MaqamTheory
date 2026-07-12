@@ -43,17 +43,18 @@ def tone(freq: float, dur: float, velocity: float = 1.0) -> np.ndarray:
 
 
 def render(events: list[tuple[float | None, float]], gap: float = 0.02,
-           tail: float = 0.6) -> np.ndarray:
+           tail: float = 0.6, bpm: float = BPM) -> np.ndarray:
     """Render (commas, beats) events into one buffer. commas=None is a rest.
 
     Notes ring slightly past their slot (legato) by rendering each note
     1.6x its nominal length and mixing into a shared buffer.
     """
-    total = sum(beats for _, beats in events) * BEAT + tail
+    beat = 60.0 / bpm
+    total = sum(beats for _, beats in events) * beat + tail
     buf = np.zeros(int(total * SR) + SR // 10)
     cursor = 0.0
     for commas, beats in events:
-        slot = beats * BEAT
+        slot = beats * beat
         if commas is not None:
             dur = min(slot * 1.6, slot + 0.5)
             note = tone(md.freq(commas), dur)
@@ -106,6 +107,11 @@ def generate() -> None:
             pitches = md.steps_to_scale(root, md.GENUS[genus_name])
             out(f"{key}_{part}.wav", scale_events(pitches))
         out(f"{key}_seyir.wav", m["seyir"])
+        if key in md.SONGS:
+            song = md.SONGS[key]
+            write_wav(f"song_{key}.wav",
+                      render(song["events"], bpm=song["bpm"], tail=1.0))
+            files += 1
 
     # Individual notes, shared across makams, keyed by comma value.
     needed = set()

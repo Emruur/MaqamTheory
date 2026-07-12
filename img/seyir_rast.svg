@@ -1,10 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -30 856 118" width="856" height="118" font-family="Georgia, serif">
-<rect x="-6" y="-30" width="856" height="118" fill="#fffdf7"/>
-<line x1="0.0" y1="0.0" x2="842.0" y2="0.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
-<line x1="0.0" y1="10.0" x2="842.0" y2="10.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
-<line x1="0.0" y1="20.0" x2="842.0" y2="20.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
-<line x1="0.0" y1="30.0" x2="842.0" y2="30.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
-<line x1="0.0" y1="40.0" x2="842.0" y2="40.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -30 830 162" width="830" height="162" font-family="Georgia, serif">
+<rect x="-6" y="-30" width="830" height="162" fill="#fffdf7"/>
+<g transform="translate(0 0.0)">
+<line x1="0.0" y1="0.0" x2="810.0" y2="0.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
+<line x1="0.0" y1="10.0" x2="810.0" y2="10.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
+<line x1="0.0" y1="20.0" x2="810.0" y2="20.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
+<line x1="0.0" y1="30.0" x2="810.0" y2="30.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
+<line x1="0.0" y1="40.0" x2="810.0" y2="40.0" stroke="#555" stroke-width="1.1" stroke-linecap="butt"/>
 <path d="M 13.5 45 C 14.5 34 16.5 14 17 -2 C 17.2 -12 15 -19 12 -15 C 9.5 -11.5 11 -4 14.5 2 C 18 8.5 23.5 14 23.5 24 C 23.5 33 16.5 37.5 10.5 34.5 C 5 31.5 6 22.5 12.5 21.5 C 17 21 19.5 25 18 29 " stroke="#2b2b2b" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M 13.5 45 C 13 50 6.5 51 6 46.5 C 5.800000000000001 43.5 9 42.5 10.5 45" stroke="#2b2b2b" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M 44.5 4 L 44.5 27.5" stroke="#2b2b2b" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -13,68 +14,69 @@
 <line x1="61.1" y1="-12.0" x2="61.1" y2="11.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
 <path d="M 54 -2.0 L 64 -5.2" stroke="#2b2b2b" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M 54 6.0 L 64 2.8000000000000003" stroke="#2b2b2b" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="128.0" cy="30.0" rx="5.4" ry="4.0" transform="rotate(-16 128.0 30.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="133.2" y1="28.5" x2="133.2" y2="0.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<ellipse cx="162.0" cy="25.0" rx="5.4" ry="4.0" transform="rotate(-16 162.0 25.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="167.2" y1="23.5" x2="167.2" y2="-5.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 167.2 -5 C 174.2 1 171.2 7 173.7 12" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="196.0" cy="20.0" rx="5.4" ry="4.0" transform="rotate(-16 196.0 20.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="201.2" y1="18.5" x2="201.2" y2="-10.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 201.2 -10 C 208.2 -4 205.2 2 207.7 7" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="230.0" cy="15.0" rx="5.4" ry="4.0" transform="rotate(-16 230.0 15.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="235.2" y1="13.5" x2="235.2" y2="-15.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 235.2 -15 C 242.2 -9 239.2 -3 241.7 2" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="264.0" cy="10.0" rx="5.4" ry="4.0" transform="rotate(-16 264.0 10.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="258.8" y1="11.5" x2="258.8" y2="40.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<ellipse cx="273.5" cy="7.0" rx="1.7" ry="1.7" transform="rotate(0 273.5 7.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<ellipse cx="298.0" cy="10.0" rx="5.4" ry="4.0" transform="rotate(-16 298.0 10.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="292.8" y1="11.5" x2="292.8" y2="40.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 292.8 40 C 299.8 34 296.8 28 299.3 23" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="332.0" cy="5.0" rx="5.4" ry="4.0" transform="rotate(-16 332.0 5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="326.8" y1="6.5" x2="326.8" y2="35.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 326.8 35 C 333.8 29 330.8 23 333.3 18" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="366.0" cy="0.0" rx="5.4" ry="4.0" transform="rotate(-16 366.0 0.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="360.8" y1="1.5" x2="360.8" y2="30.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 360.8 30 C 367.8 24 364.8 18 367.3 13" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="400.0" cy="-5.0" rx="5.4" ry="4.0" transform="rotate(-16 400.0 -5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="394.8" y1="-3.5" x2="394.8" y2="25.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<ellipse cx="409.5" cy="-5.0" rx="1.7" ry="1.7" transform="rotate(0 409.5 -5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<ellipse cx="434.0" cy="-5.0" rx="5.4" ry="4.0" transform="rotate(-16 434.0 -5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="428.8" y1="-3.5" x2="428.8" y2="25.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 428.8 25 C 435.8 19 432.8 13 435.3 8" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<line x1="452.9" y1="-10.0" x2="452.9" y2="4.5" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<line x1="457.1" y1="-4.5" x2="457.1" y2="10.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 452.9 -1.8000000000000003 L 457.1 -4.6" stroke="#2b2b2b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M 452.9 4.6 L 457.1 1.8000000000000003" stroke="#2b2b2b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="468.0" cy="0.0" rx="5.4" ry="4.0" transform="rotate(-16 468.0 0.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="462.8" y1="1.5" x2="462.8" y2="30.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 462.8 30 C 469.8 24 466.8 18 469.3 13" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="502.0" cy="5.0" rx="5.4" ry="4.0" transform="rotate(-16 502.0 5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="496.8" y1="6.5" x2="496.8" y2="35.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 496.8 35 C 503.8 29 500.8 23 503.3 18" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="536.0" cy="10.0" rx="5.4" ry="4.0" transform="rotate(-16 536.0 10.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="530.8" y1="11.5" x2="530.8" y2="40.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<ellipse cx="570.0" cy="10.0" rx="5.4" ry="4.0" transform="rotate(-16 570.0 10.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="564.8" y1="11.5" x2="564.8" y2="40.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 564.8 40 C 571.8 34 568.8 28 571.3 23" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="604.0" cy="15.0" rx="5.4" ry="4.0" transform="rotate(-16 604.0 15.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="609.2" y1="13.5" x2="609.2" y2="-15.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 609.2 -15 C 616.2 -9 613.2 -3 615.7 2" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="638.0" cy="20.0" rx="5.4" ry="4.0" transform="rotate(-16 638.0 20.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="643.2" y1="18.5" x2="643.2" y2="-10.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 643.2 -10 C 650.2 -4 647.2 2 649.7 7" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="672.0" cy="25.0" rx="5.4" ry="4.0" transform="rotate(-16 672.0 25.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="677.2" y1="23.5" x2="677.2" y2="-5.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<ellipse cx="706.0" cy="20.0" rx="5.4" ry="4.0" transform="rotate(-16 706.0 20.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="711.2" y1="18.5" x2="711.2" y2="-10.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 711.2 -10 C 718.2 -4 715.2 2 717.7 7" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="740.0" cy="25.0" rx="5.4" ry="4.0" transform="rotate(-16 740.0 25.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="745.2" y1="23.5" x2="745.2" y2="-5.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 745.2 -5 C 752.2 1 749.2 7 751.7 12" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="774.0" cy="35.0" rx="5.4" ry="4.0" transform="rotate(-16 774.0 35.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
-<line x1="779.2" y1="33.5" x2="779.2" y2="5.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
-<path d="M 779.2 5 C 786.2 11 783.2 17 785.7 22" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-<ellipse cx="808.0" cy="30.0" rx="5.6" ry="4.1" transform="rotate(-16 808.0 30.0)" fill="#fffdf7" stroke="#2b2b2b" stroke-width="1.9"/>
-<line x1="813.2" y1="28.5" x2="813.2" y2="0.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<ellipse cx="100.0" cy="30.0" rx="5.4" ry="4.0" transform="rotate(-16 100.0 30.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="105.2" y1="28.5" x2="105.2" y2="0.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<ellipse cx="134.0" cy="25.0" rx="5.4" ry="4.0" transform="rotate(-16 134.0 25.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="139.2" y1="23.5" x2="139.2" y2="-5.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 139.2 -5 C 146.2 1 143.2 7 145.7 12" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="168.0" cy="20.0" rx="5.4" ry="4.0" transform="rotate(-16 168.0 20.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="173.2" y1="18.5" x2="173.2" y2="-10.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 173.2 -10 C 180.2 -4 177.2 2 179.7 7" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="202.0" cy="15.0" rx="5.4" ry="4.0" transform="rotate(-16 202.0 15.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="207.2" y1="13.5" x2="207.2" y2="-15.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 207.2 -15 C 214.2 -9 211.2 -3 213.7 2" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="236.0" cy="10.0" rx="5.4" ry="4.0" transform="rotate(-16 236.0 10.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="230.8" y1="11.5" x2="230.8" y2="40.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<ellipse cx="245.5" cy="7.0" rx="1.7" ry="1.7" transform="rotate(0 245.5 7.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<ellipse cx="270.0" cy="10.0" rx="5.4" ry="4.0" transform="rotate(-16 270.0 10.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="264.8" y1="11.5" x2="264.8" y2="40.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 264.8 40 C 271.8 34 268.8 28 271.3 23" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="304.0" cy="5.0" rx="5.4" ry="4.0" transform="rotate(-16 304.0 5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="298.8" y1="6.5" x2="298.8" y2="35.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 298.8 35 C 305.8 29 302.8 23 305.3 18" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="338.0" cy="0.0" rx="5.4" ry="4.0" transform="rotate(-16 338.0 0.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="332.8" y1="1.5" x2="332.8" y2="30.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 332.8 30 C 339.8 24 336.8 18 339.3 13" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="372.0" cy="-5.0" rx="5.4" ry="4.0" transform="rotate(-16 372.0 -5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="366.8" y1="-3.5" x2="366.8" y2="25.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<ellipse cx="381.5" cy="-5.0" rx="1.7" ry="1.7" transform="rotate(0 381.5 -5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<ellipse cx="406.0" cy="-5.0" rx="5.4" ry="4.0" transform="rotate(-16 406.0 -5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="400.8" y1="-3.5" x2="400.8" y2="25.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 400.8 25 C 407.8 19 404.8 13 407.3 8" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="424.9" y1="-10.0" x2="424.9" y2="4.5" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<line x1="429.1" y1="-4.5" x2="429.1" y2="10.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 424.9 -1.8000000000000003 L 429.1 -4.6" stroke="#2b2b2b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 424.9 4.6 L 429.1 1.8000000000000003" stroke="#2b2b2b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="440.0" cy="0.0" rx="5.4" ry="4.0" transform="rotate(-16 440.0 0.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="434.8" y1="1.5" x2="434.8" y2="30.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 434.8 30 C 441.8 24 438.8 18 441.3 13" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="474.0" cy="5.0" rx="5.4" ry="4.0" transform="rotate(-16 474.0 5.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="468.8" y1="6.5" x2="468.8" y2="35.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 468.8 35 C 475.8 29 472.8 23 475.3 18" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="508.0" cy="10.0" rx="5.4" ry="4.0" transform="rotate(-16 508.0 10.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="502.8" y1="11.5" x2="502.8" y2="40.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<ellipse cx="542.0" cy="10.0" rx="5.4" ry="4.0" transform="rotate(-16 542.0 10.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="536.8" y1="11.5" x2="536.8" y2="40.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 536.8 40 C 543.8 34 540.8 28 543.3 23" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="576.0" cy="15.0" rx="5.4" ry="4.0" transform="rotate(-16 576.0 15.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="581.2" y1="13.5" x2="581.2" y2="-15.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 581.2 -15 C 588.2 -9 585.2 -3 587.7 2" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="610.0" cy="20.0" rx="5.4" ry="4.0" transform="rotate(-16 610.0 20.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="615.2" y1="18.5" x2="615.2" y2="-10.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 615.2 -10 C 622.2 -4 619.2 2 621.7 7" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="644.0" cy="25.0" rx="5.4" ry="4.0" transform="rotate(-16 644.0 25.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="649.2" y1="23.5" x2="649.2" y2="-5.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<ellipse cx="678.0" cy="20.0" rx="5.4" ry="4.0" transform="rotate(-16 678.0 20.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="683.2" y1="18.5" x2="683.2" y2="-10.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 683.2 -10 C 690.2 -4 687.2 2 689.7 7" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="712.0" cy="25.0" rx="5.4" ry="4.0" transform="rotate(-16 712.0 25.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="717.2" y1="23.5" x2="717.2" y2="-5.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 717.2 -5 C 724.2 1 721.2 7 723.7 12" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="746.0" cy="35.0" rx="5.4" ry="4.0" transform="rotate(-16 746.0 35.0)" fill="#2b2b2b" stroke="none" stroke-width="0"/>
+<line x1="751.2" y1="33.5" x2="751.2" y2="5.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+<path d="M 751.2 5 C 758.2 11 755.2 17 757.7 22" stroke="#2b2b2b" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="780.0" cy="30.0" rx="5.6" ry="4.1" transform="rotate(-16 780.0 30.0)" fill="#fffdf7" stroke="#2b2b2b" stroke-width="1.9"/>
+<line x1="785.2" y1="28.5" x2="785.2" y2="0.0" stroke="#2b2b2b" stroke-width="1.4" stroke-linecap="butt"/>
+</g>
 <text x="0.0" y="-18.0" font-size="13" text-anchor="start" fill="#333" font-weight="bold" style="">Rast seyir sketch</text>
 </svg>
