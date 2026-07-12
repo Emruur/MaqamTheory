@@ -181,6 +181,27 @@ button.play.playing::before { content: "\25A0\00a0"; }
 .note-chip.tonic { border-width: 3px; }
 
 /* ---- keyboard instrument ---- */
+.kbd-voices {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  margin: 1.1rem 0 0.4rem;
+}
+.kbd-voices button {
+  font: 600 0.88rem Georgia, serif;
+  padding: 0.4rem 0.95rem;
+  border: 1.5px solid var(--accent);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.kbd-voices button:hover { background: var(--accent-soft); }
+.kbd-voices button.selected {
+  background: var(--accent);
+  color: var(--card);
+}
+
 .kbd-instrument {
   display: flex;
   flex-wrap: wrap;

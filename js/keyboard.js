@@ -1,7 +1,7 @@
 /* Computer-keyboard instrument: play the makam's perdeler live.
    Physical home-row keys (layout-independent event.code) map to scale
-   degrees; Web Audio synthesizes the exact AEU comma pitches with the
-   same warm harmonic recipe as the WAV files. Hold a key to sustain. */
+   degrees; Web Audio synthesizes the exact AEU comma pitches. Hold a key
+   to sustain. Three selectable voices: warm synth, breathy ney, plucked oud. */
 
 (function () {
   "use strict";
@@ -9,7 +9,21 @@
   const KEY_CODES = ["KeyA", "KeyS", "KeyD", "KeyF", "KeyG", "KeyH",
                      "KeyJ", "KeyK", "KeyL", "Semicolon", "Quote"];
   const KEY_CAPS = ["A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'"];
-  const HARMONICS = [0, 1, 0.42, 0.28, 0.12, 0.08, 0.045];
+
+  const VOICES = {
+    warm: {
+      label: "Warm synth",
+      harmonics: [0, 1, 0.42, 0.28, 0.12, 0.08, 0.045],
+    },
+    ney: {
+      label: "Breathy ney",
+      harmonics: [0, 1, 0.14, 0.40, 0.09, 0.17, 0.05, 0.07],
+    },
+    pluck: {
+      label: "Plucked oud",
+      harmonics: [0, 1, 0.62, 0.45, 0.30, 0.19, 0.12, 0.08, 0.05],
+    },
+  };
 
   const box = document.querySelector(".kbd-instrument");
   if (!box) return;
@@ -19,22 +33,35 @@
     return { commas: +parts[0], perde: parts[1], flag: parts[2] || "" };
   });
 
-  let ctx = null, wave = null, master = null;
-  const active = new Map();   // index -> {osc, gain}
+  let ctx = null, master = null, noiseBuf = null;
+  const waves = {};           // voice key -> PeriodicWave
+  const active = new Map();   // note index -> handle {off(t)}
   const keyEls = [];
+
+  let voice = "warm";
+  try {
+    if (localStorage.getItem("maqam-voice") in VOICES) {
+      voice = localStorage.getItem("maqam-voice");
+    }
+  } catch (e) { /* private mode etc. */ }
 
   function ensureAudio() {
     if (!ctx) {
       ctx = new (window.AudioContext || window.webkitAudioContext)();
-      wave = ctx.createPeriodicWave(
-        new Float32Array(HARMONICS.length),
-        Float32Array.from(HARMONICS));
       master = ctx.createGain();
       master.gain.value = 0.9;
       const lp = ctx.createBiquadFilter();
       lp.type = "lowpass";
-      lp.frequency.value = 5200;
+      lp.frequency.value = 6200;
       master.connect(lp).connect(ctx.destination);
+      Object.keys(VOICES).forEach(function (k) {
+        const h = VOICES[k].harmonics;
+        waves[k] = ctx.createPeriodicWave(
+          new Float32Array(h.length), Float32Array.from(h));
+      });
+      noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 1.5, ctx.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
     }
     if (ctx.state === "suspended") ctx.resume();
   }
@@ -43,34 +70,121 @@
     return 440 * Math.pow(2, (commas - 40) / 53);
   }
 
+  /* Each starter returns a handle with off(t) that releases and cleans up. */
+
+  function startWarm(f, t) {
+    const osc = ctx.createOscillator();
+    osc.setPeriodicWave(waves.warm);
+    osc.frequency.value = f;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.30, t + 0.025);
+    g.gain.exponentialRampToValueAtTime(0.16, t + 0.7);
+    osc.connect(g).connect(master);
+    osc.start(t);
+    return { off: function (te) { release(g, [osc], te, 0.35); } };
+  }
+
+  function startNey(f, t) {
+    const osc = ctx.createOscillator();
+    osc.setPeriodicWave(waves.ney);
+    osc.frequency.value = f;
+    // Delayed vibrato.
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = 4.8;
+    const depth = ctx.createGain();
+    depth.gain.setValueAtTime(0, t);
+    depth.gain.linearRampToValueAtTime(f * 0.004, t + 0.6);
+    lfo.connect(depth).connect(osc.frequency);
+    // Breath: band-passed noise around the second partial.
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuf;
+    noise.loop = true;
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = f * 2;
+    bp.Q.value = 9;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.0001, t);
+    ng.gain.exponentialRampToValueAtTime(0.035, t + 0.12);
+    noise.connect(bp).connect(ng).connect(master);
+    // Slow, swelling body.
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.26, t + 0.09);
+    g.gain.exponentialRampToValueAtTime(0.20, t + 0.9);
+    osc.connect(g).connect(master);
+    osc.start(t); lfo.start(t); noise.start(t);
+    return { off: function (te) {
+      release(ng, [noise], te, 0.18);
+      release(g, [osc, lfo], te, 0.28);
+    } };
+  }
+
+  function startPluck(f, t) {
+    const osc = ctx.createOscillator();
+    osc.setPeriodicWave(waves.pluck);
+    osc.frequency.value = f;
+    // Darkening filter: bright attack, mellow tail, like a plucked string.
+    const lp = ctx.createBiquadFilter();
+    lp.type = "lowpass";
+    lp.frequency.setValueAtTime(Math.min(f * 9, 7500), t);
+    lp.frequency.exponentialRampToValueAtTime(Math.max(f * 2, 700), t + 0.9);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.34, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(0.002, t + 1.6);
+    osc.connect(lp).connect(g).connect(master);
+    osc.start(t);
+    return { off: function (te) { release(g, [osc], te, 0.12); } };
+  }
+
+  function release(gainNode, sources, t, secs) {
+    gainNode.gain.cancelScheduledValues(t);
+    gainNode.gain.setValueAtTime(Math.max(gainNode.gain.value, 0.0001), t);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, t + secs);
+    sources.forEach(function (s) { s.stop(t + secs + 0.05); });
+  }
+
+  const STARTERS = { warm: startWarm, ney: startNey, pluck: startPluck };
+
   function noteOn(i) {
     if (i < 0 || i >= notes.length || active.has(i)) return;
     ensureAudio();
-    const t = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    osc.setPeriodicWave(wave);
-    osc.frequency.value = freqOf(notes[i].commas);
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(0.30, t + 0.025);
-    gain.gain.exponentialRampToValueAtTime(0.16, t + 0.7);
-    osc.connect(gain).connect(master);
-    osc.start(t);
-    active.set(i, { osc: osc, gain: gain });
+    active.set(i, STARTERS[voice](freqOf(notes[i].commas), ctx.currentTime));
     keyEls[i].classList.add("active");
   }
 
   function noteOff(i) {
-    const v = active.get(i);
-    if (!v) return;
+    const h = active.get(i);
+    if (!h) return;
     active.delete(i);
-    const t = ctx.currentTime;
-    v.gain.gain.cancelScheduledValues(t);
-    v.gain.gain.setValueAtTime(Math.max(v.gain.gain.value, 0.0001), t);
-    v.gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
-    v.osc.stop(t + 0.4);
+    h.off(ctx.currentTime);
     keyEls[i].classList.remove("active");
   }
+
+  // Voice selector, inserted just above the keyboard.
+  const sel = document.createElement("div");
+  sel.className = "kbd-voices";
+  sel.setAttribute("role", "group");
+  sel.setAttribute("aria-label", "Instrument voice");
+  const voiceBtns = {};
+  Object.keys(VOICES).forEach(function (k) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = VOICES[k].label;
+    b.className = k === voice ? "selected" : "";
+    b.addEventListener("click", function () {
+      voice = k;
+      try { localStorage.setItem("maqam-voice", k); } catch (e) {}
+      Object.keys(voiceBtns).forEach(function (kk) {
+        voiceBtns[kk].classList.toggle("selected", kk === k);
+      });
+    });
+    voiceBtns[k] = b;
+    sel.appendChild(b);
+  });
+  box.parentNode.insertBefore(sel, box);
 
   // Build the on-screen keys.
   notes.forEach(function (n, i) {
