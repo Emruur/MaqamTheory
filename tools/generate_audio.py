@@ -1,7 +1,8 @@
-"""Generate all WAV files for the maqam learning site.
+"""Generate all WAV files for the maqam learning site, in three voices.
 
 Usage:
-    python3 tools/generate_audio.py           # write audio/*.wav
+    python3 tools/generate_audio.py           # write audio/*.wav (warm),
+                                              # audio/ney/*, audio/pluck/*
     python3 tools/generate_audio.py --check   # verify theory data + synth pitch
 """
 
@@ -17,38 +18,69 @@ import makam_data as md
 SR = 44100
 OUT = Path(__file__).parent.parent / "audio"
 BPM = 96
-BEAT = 60.0 / BPM
 
-# Harmonic recipe for the "warm synth" tone: (harmonic number, amplitude).
-HARMONICS = [(1, 1.0), (2, 0.42), (3, 0.28), (4, 0.12), (5, 0.08), (6, 0.045)]
+# Three timbres. The "warm" voice lives at audio/ root (site default);
+# the others in subdirectories switched by the site-wide voice picker.
+VOICES = {
+    "warm": {
+        "subdir": "",
+        "harmonics": [(1, 1.0), (2, 0.42), (3, 0.28), (4, 0.12),
+                      (5, 0.08), (6, 0.045)],
+        "attack": 0.028, "decay": 1.4, "harm_decay": 0.9,
+        "vib_depth": 0.0025, "vib_rate": 5.2, "noise": 0.0,
+    },
+    "ney": {
+        "subdir": "ney",
+        "harmonics": [(1, 1.0), (2, 0.14), (3, 0.40), (4, 0.09),
+                      (5, 0.17), (6, 0.05), (7, 0.07)],
+        "attack": 0.09, "decay": 1.0, "harm_decay": 0.7,
+        "vib_depth": 0.0042, "vib_rate": 4.8, "noise": 0.10,
+    },
+    "pluck": {
+        "subdir": "pluck",
+        "harmonics": [(1, 1.0), (2, 0.62), (3, 0.45), (4, 0.30),
+                      (5, 0.19), (6, 0.12), (7, 0.08), (8, 0.05)],
+        "attack": 0.005, "decay": 2.3, "harm_decay": 2.2,
+        "vib_depth": 0.0, "vib_rate": 5.0, "noise": 0.0,
+    },
+}
 
 
-def tone(freq: float, dur: float, velocity: float = 1.0) -> np.ndarray:
-    """One warm synthesized note: additive harmonics, soft attack, gentle decay."""
+def bandpass_noise(n: int, f0: float) -> np.ndarray:
+    """Breath layer for the ney: noise resonating around a centre frequency."""
+    spec = np.fft.rfft(np.random.default_rng(int(f0 * 100)).standard_normal(n))
+    freqs = np.fft.rfftfreq(n, 1 / SR)
+    resp = 1.0 / (1.0 + ((freqs - f0) / (f0 / 9.0)) ** 2)
+    out = np.fft.irfft(spec * resp, n)
+    peak = np.max(np.abs(out))
+    return out / peak if peak > 0 else out
+
+
+def tone(freq: float, dur: float, voice: str = "warm",
+         velocity: float = 1.0) -> np.ndarray:
+    """One synthesized note in the given voice."""
+    v = VOICES[voice]
     n = int(dur * SR)
     t = np.arange(n) / SR
-    # Delayed, subtle vibrato (starts after ~0.25 s).
-    vib_depth = 0.0025 * np.clip((t - 0.25) / 0.35, 0, 1)
-    inst_freq = freq * (1 + vib_depth * np.sin(2 * np.pi * 5.2 * t))
+    vib = v["vib_depth"] * np.clip((t - 0.25) / 0.35, 0, 1)
+    inst_freq = freq * (1 + vib * np.sin(2 * np.pi * v["vib_rate"] * t))
     phase = 2 * np.pi * np.cumsum(inst_freq) / SR
     sig = np.zeros(n)
-    for k, amp in HARMONICS:
-        # Higher harmonics decay a bit faster for a rounder sustain.
-        sig += amp * np.exp(-t * 0.9 * k) * np.sin(k * phase)
-    attack = np.minimum(t / 0.028, 1.0)
-    decay = np.exp(-t * 1.4)
+    for k, amp in v["harmonics"]:
+        sig += amp * np.exp(-t * v["harm_decay"] * k) * np.sin(k * phase)
+    if v["noise"] > 0:
+        sig += v["noise"] * bandpass_noise(n, freq * 2)
+    attack = np.minimum(t / v["attack"], 1.0)
+    decay = np.exp(-t * v["decay"])
     release_len = min(0.06, dur / 4)
     release = np.clip((dur - t) / release_len, 0, 1)
     return velocity * sig * attack * decay * release
 
 
-def render(events: list[tuple[float | None, float]], gap: float = 0.02,
-           tail: float = 0.6, bpm: float = BPM) -> np.ndarray:
-    """Render (commas, beats) events into one buffer. commas=None is a rest.
-
-    Notes ring slightly past their slot (legato) by rendering each note
-    1.6x its nominal length and mixing into a shared buffer.
-    """
+def render(events: list[tuple[float | None, float]], voice: str = "warm",
+           gap: float = 0.02, tail: float = 0.6,
+           bpm: float = BPM) -> np.ndarray:
+    """Render (commas, beats) events into one buffer. commas=None is a rest."""
     beat = 60.0 / bpm
     total = sum(beats for _, beats in events) * beat + tail
     buf = np.zeros(int(total * SR) + SR // 10)
@@ -57,7 +89,7 @@ def render(events: list[tuple[float | None, float]], gap: float = 0.02,
         slot = beats * beat
         if commas is not None:
             dur = min(slot * 1.6, slot + 0.5)
-            note = tone(md.freq(commas), dur)
+            note = tone(md.freq(commas), dur, voice)
             i = int((cursor + gap) * SR)
             note = note[: max(0, len(buf) - i)]
             buf[i:i + len(note)] += note
@@ -68,10 +100,11 @@ def render(events: list[tuple[float | None, float]], gap: float = 0.02,
     return buf
 
 
-def write_wav(name: str, buf: np.ndarray) -> None:
-    OUT.mkdir(exist_ok=True)
+def write_wav(name: str, buf: np.ndarray, subdir: str = "") -> None:
+    d = OUT / subdir if subdir else OUT
+    d.mkdir(parents=True, exist_ok=True)
     data = (np.clip(buf, -1, 1) * 32767).astype("<i2")
-    with wave.open(str(OUT / name), "wb") as w:
+    with wave.open(str(d / name), "wb") as w:
         w.setnchannels(1)
         w.setsampwidth(2)
         w.setframerate(SR)
@@ -86,34 +119,29 @@ def scale_events(pitches: list[int], hold_ends: bool = True):
     return ev
 
 
-def generate() -> None:
-    files = 0
+def collect_sequences() -> dict[str, dict]:
+    """Every sequence on the site: {name: {events, bpm, tail}}."""
+    seqs = {}
 
-    def out(name, events):
-        nonlocal files
-        write_wav(name, render(events))
-        files += 1
+    def add(name, events, bpm=BPM, tail=0.6):
+        seqs[name] = {"events": events, "bpm": bpm, "tail": tail}
 
     for key, m in md.MAKAMLAR.items():
         asc, desc = m["asc"], m["desc"]
-        out(f"{key}_scale_asc.wav", scale_events(asc))
-        out(f"{key}_scale_desc.wav", scale_events(list(reversed(desc))))
-        # Quiz version: continuous up-and-down, slightly brisker.
+        add(f"{key}_scale_asc", scale_events(asc))
+        add(f"{key}_scale_desc", scale_events(list(reversed(desc))))
         updown = asc + list(reversed(desc))[1:]
-        out(f"{key}_quiz.wav", [(p, 0.6) for p in updown[:-1]] + [(updown[-1], 1.6)])
-        # Genus segments.
+        add(f"{key}_quiz",
+            [(p, 0.6) for p in updown[:-1]] + [(updown[-1], 1.6)])
         for part in ("lower_genus", "upper_genus"):
             _, genus_name, root = m[part]
-            pitches = md.steps_to_scale(root, md.GENUS[genus_name])
-            out(f"{key}_{part}.wav", scale_events(pitches))
-        out(f"{key}_seyir.wav", m["seyir"])
+            add(f"{key}_{part}",
+                scale_events(md.steps_to_scale(root, md.GENUS[genus_name])))
+        add(f"{key}_seyir", m["seyir"])
         if key in md.SONGS:
             song = md.SONGS[key]
-            write_wav(f"song_{key}.wav",
-                      render(song["events"], bpm=song["bpm"], tail=1.0))
-            files += 1
+            add(f"song_{key}", song["events"], bpm=song["bpm"], tail=1.0)
 
-    # Individual notes, shared across makams, keyed by comma value.
     needed = set()
     for m in md.MAKAMLAR.values():
         needed.update(m["asc"])
@@ -122,67 +150,75 @@ def generate() -> None:
     for name, (genus_name, root) in md.GENUS_DEMOS.items():
         needed.update(md.steps_to_scale(root, md.GENUS[genus_name]))
     for commas in sorted(needed):
-        write_wav(f"note_{commas}.wav", render([(commas, 1.4)], tail=0.4))
-        files += 1
+        add(f"note_{commas}", [(commas, 1.4)], tail=0.4)
 
-    # Chapter 4: every genus type on the same root (dugah).
     for name, (genus_name, root) in md.GENUS_DEMOS.items():
-        pitches = md.steps_to_scale(root, md.GENUS[genus_name])
-        out(f"genus_{name}.wav", scale_events(pitches))
+        add(f"genus_{name}",
+            scale_events(md.steps_to_scale(root, md.GENUS[genus_name])))
 
-    # Chapter 2 demos.
-    # The whole tone dugah->buselik split into 9 single-comma steps.
-    out("demo_comma_steps.wav",
-        [(40 + i, 0.55) for i in range(9)] + [(49, 1.4)])
-    # One comma in isolation: A, then A one comma higher, alternating.
-    out("demo_one_comma.wav",
-        [(40, 1.2), (41, 1.2), (40, 1.2), (41, 1.6)])
-    # The four B's between A and B natural: buselik, segah, dik kurdi, kurdi.
-    out("demo_b_variants.wav",
+    add("demo_comma_steps", [(40 + i, 0.55) for i in range(9)] + [(49, 1.4)])
+    add("demo_one_comma", [(40, 1.2), (41, 1.2), (40, 1.2), (41, 1.6)])
+    add("demo_b_variants",
         [(40, 0.7), (49, 1.5), (None, 0.5),
          (40, 0.7), (48, 1.5), (None, 0.5),
          (40, 0.7), (45, 1.5), (None, 0.5),
          (40, 0.7), (44, 1.5)])
-    # Tanini (9), buyuk mucenneb (8), kucuk mucenneb (5), bakiye (4) from dugah.
-    out("demo_intervals.wav",
+    add("demo_intervals",
         [(40, 0.7), (49, 1.3), (None, 0.4),
          (40, 0.7), (48, 1.3), (None, 0.4),
          (40, 0.7), (45, 1.3), (None, 0.4),
          (40, 0.7), (44, 1.3)])
-    # Chapter 3: the perde ladder from rast to gerdaniye (main pitches).
     ladder = [31, 40, 44, 45, 48, 49, 53, 57, 62, 66, 67, 71, 75, 79, 84]
-    out("demo_perde_ladder.wav", [(p, 0.6) for p in ladder[:-1]] + [(84, 1.6)])
-    # 12-TET major scale on G for comparison with Rast (chapter 5).
+    add("demo_perde_ladder", [(p, 0.6) for p in ladder[:-1]] + [(84, 1.6)])
+    return seqs
+
+
+def render_12tet(voice: str) -> np.ndarray:
+    """G major in 12-TET for the Rast comparison (raw Hz, not commas)."""
     tet = [392.0 * 2 ** (s / 12) for s in [0, 2, 4, 5, 7, 9, 11, 12]]
-    # Rendered by hand since render() works in commas, not Hz.
-    total = (0.75 * 7 + 1.6) * BEAT + 0.6
+    beat = 60.0 / BPM
+    total = (0.75 * 7 + 1.6) * beat + 0.6
     buf = np.zeros(int(total * SR) + SR // 10)
     cursor = 0.0
     for i, f in enumerate(tet):
         beats = 1.6 if i == len(tet) - 1 else 0.75
-        note = tone(f, min(beats * BEAT * 1.6, beats * BEAT + 0.5))
+        note = tone(f, min(beats * beat * 1.6, beats * beat + 0.5), voice)
         j = int((cursor + 0.02) * SR)
+        note = note[: max(0, len(buf) - j)]
         buf[j:j + len(note)] += note
-        cursor += beats * BEAT
+        cursor += beats * beat
     buf *= 0.82 / np.max(np.abs(buf))
-    write_wav("demo_g_major_12tet.wav", buf)
-    files += 1
+    return buf
 
-    print(f"wrote {files} files to {OUT}")
+
+def generate() -> None:
+    seqs = collect_sequences()
+    for vname, v in VOICES.items():
+        count = 0
+        for name, s in seqs.items():
+            write_wav(f"{name}.wav",
+                      render(s["events"], vname, bpm=s["bpm"], tail=s["tail"]),
+                      subdir=v["subdir"])
+            count += 1
+        write_wav("demo_g_major_12tet.wav", render_12tet(vname),
+                  subdir=v["subdir"])
+        count += 1
+        where = v["subdir"] or "."
+        print(f"  {vname}: wrote {count} files to audio/{where}")
 
 
 def check() -> None:
     md.check()
-    # Verify synthesized fundamental via FFT for a few pitches.
-    for commas in (31, 40, 48, 62, 79, 93):
-        expected = md.freq(commas)
-        sig = tone(expected, 1.0)
-        spec = np.abs(np.fft.rfft(sig * np.hanning(len(sig))))
-        peak_hz = np.argmax(spec) * SR / len(sig)
-        assert abs(peak_hz - expected) < 1.5, (
-            f"commas={commas}: FFT peak {peak_hz:.2f} Hz != expected {expected:.2f} Hz")
-        print(f"  commas {commas:>3}: expected {expected:8.2f} Hz, "
-              f"FFT peak {peak_hz:8.2f} Hz  ok")
+    for vname in VOICES:
+        for commas in (31, 40, 48, 62, 79, 93):
+            expected = md.freq(commas)
+            sig = tone(expected, 1.0, vname)
+            spec = np.abs(np.fft.rfft(sig * np.hanning(len(sig))))
+            peak_hz = np.argmax(spec) * SR / len(sig)
+            assert abs(peak_hz - expected) < 1.5, (
+                f"{vname} commas={commas}: FFT peak {peak_hz:.2f} Hz "
+                f"!= expected {expected:.2f} Hz")
+        print(f"  {vname}: fundamentals verified at 6 pitches")
     print("generate_audio: synthesis checks passed")
 
 

@@ -25,9 +25,13 @@ All audio (`audio/*.wav`) and notation (`img/*.svg`) are generated:
 
 ```sh
 python3 tools/generate_audio.py --check   # verify theory data + synth pitch
-python3 tools/generate_audio.py           # write ~60 WAV files
+python3 tools/generate_audio.py           # write all WAVs in 3 voices
 python3 tools/generate_notation.py        # write ~40 SVG files
 ```
+
+Audio is rendered in three timbres, switched site-wide by the ♪ picker in the
+page header: warm synth (`audio/`), breathy ney (`audio/ney/`), and plucked
+oud (`audio/pluck/`). The live keyboard instrument follows the same picker.
 
 Requires Python 3 and numpy (audio only). All pitch math lives in
 `tools/makam_data.py`: pitches are Holdrian commas above written C4 in the

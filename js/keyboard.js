@@ -38,12 +38,15 @@
   const active = new Map();   // note index -> handle {off(t)}
   const keyEls = [];
 
+  // Follow the site-wide voice picker (js/voice.js). "oud" maps to pluck.
   let voice = "warm";
-  try {
-    if (localStorage.getItem("maqam-voice") in VOICES) {
-      voice = localStorage.getItem("maqam-voice");
-    }
-  } catch (e) { /* private mode etc. */ }
+  if (window.MaqamVoice) {
+    voice = window.MaqamVoice.get();
+    window.MaqamVoice.onChange(function (v) {
+      voice = v in VOICES ? v : "warm";
+    });
+    if (!(voice in VOICES)) voice = "warm";
+  }
 
   function ensureAudio() {
     if (!ctx) {
@@ -162,29 +165,6 @@
     h.off(ctx.currentTime);
     keyEls[i].classList.remove("active");
   }
-
-  // Voice selector, inserted just above the keyboard.
-  const sel = document.createElement("div");
-  sel.className = "kbd-voices";
-  sel.setAttribute("role", "group");
-  sel.setAttribute("aria-label", "Instrument voice");
-  const voiceBtns = {};
-  Object.keys(VOICES).forEach(function (k) {
-    const b = document.createElement("button");
-    b.type = "button";
-    b.textContent = VOICES[k].label;
-    b.className = k === voice ? "selected" : "";
-    b.addEventListener("click", function () {
-      voice = k;
-      try { localStorage.setItem("maqam-voice", k); } catch (e) {}
-      Object.keys(voiceBtns).forEach(function (kk) {
-        voiceBtns[kk].classList.toggle("selected", kk === k);
-      });
-    });
-    voiceBtns[k] = b;
-    sel.appendChild(b);
-  });
-  box.parentNode.insertBefore(sel, box);
 
   // Build the on-screen keys.
   notes.forEach(function (n, i) {

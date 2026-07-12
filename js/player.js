@@ -17,6 +17,7 @@
   function play(el, src, cls) {
     if (current && current.el === el) { stopCurrent(); return; }
     stopCurrent();
+    if (window.MaqamVoice) src = window.MaqamVoice.path(src);
     const audio = new Audio(src);
     el.classList.add(cls);
     current = { audio, el, cls };

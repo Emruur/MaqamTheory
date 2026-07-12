@@ -47,7 +47,9 @@
   function playScale() {
     if (!answer) return;
     if (audio) { audio.pause(); audio.currentTime = 0; }
-    audio = new Audio("../audio/" + answer.key + "_quiz.wav");
+    let src = "../audio/" + answer.key + "_quiz.wav";
+    if (window.MaqamVoice) src = window.MaqamVoice.path(src);
+    audio = new Audio(src);
     audio.play();
   }
 
