@@ -180,6 +180,41 @@ button.play.playing::before { content: "\25A0\00a0"; }
 .note-chip.sounding .western { color: var(--accent-soft); }
 .note-chip.tonic { border-width: 3px; }
 
+/* ---- keyboard root (transposition) selector ---- */
+.kbd-root {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 1.1rem 0 0.4rem;
+}
+.kbd-root .kr-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #574e3e;
+  margin-right: 0.15rem;
+}
+.kbd-root button {
+  font: 600 0.9rem Georgia, serif;
+  min-width: 2.2rem;
+  padding: 0.28rem 0.55rem;
+  border: 1.4px solid var(--accent);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.kbd-root button:hover { background: var(--accent-soft); }
+.kbd-root button.selected {
+  background: var(--accent);
+  color: var(--card);
+}
+.kbd-root .kr-status {
+  font-size: 0.84rem;
+  color: #7c7260;
+  margin-left: 0.4rem;
+}
+
 /* ---- global voice picker (header) ---- */
 .voice-picker {
   display: inline-flex;

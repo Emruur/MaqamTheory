@@ -33,6 +33,33 @@
     return { commas: +parts[0], perde: parts[1], flag: parts[2] || "" };
   });
 
+  /* ---- transposable root (ahenk) ---- */
+  const NATURALS = { C: 0, D: 9, E: 18, F: 22, G: 31, A: 40, B: 49 };
+  const ROOT_ORDER = ["A", "B", "C", "D", "E", "F", "G"];
+  const tonicCommas = (notes.find(function (n) { return n.flag === "t"; })
+                       || notes[0]).commas;
+  const writtenRoot = Object.keys(NATURALS).find(function (L) {
+    return NATURALS[L] === tonicCommas % 53;
+  }) || "G";
+  const makamKey = (document.body.className.match(/makam-(\w+)/) || [])[1] || "x";
+  let root = writtenRoot;
+  try {
+    const saved = localStorage.getItem("maqam-root-" + makamKey);
+    if (saved in NATURALS) root = saved;
+  } catch (e) {}
+
+  function offsetCommas() {
+    let d = NATURALS[root] - (tonicCommas % 53);
+    if (d > 26) d -= 53;
+    if (d <= -26) d += 53;
+    return d;
+  }
+
+  function soundingTonicName() {
+    const c = tonicCommas + offsetCommas();
+    return root + (4 + Math.floor(c / 53));
+  }
+
   let ctx = null, master = null, noiseBuf = null;
   const waves = {};           // voice key -> PeriodicWave
   const active = new Map();   // note index -> handle {off(t)}
@@ -70,7 +97,7 @@
   }
 
   function freqOf(commas) {
-    return 440 * Math.pow(2, (commas - 40) / 53);
+    return 440 * Math.pow(2, (commas + offsetCommas() - 40) / 53);
   }
 
   /* Each starter returns a handle with off(t) that releases and cleans up. */
@@ -165,6 +192,44 @@
     h.off(ctx.currentTime);
     keyEls[i].classList.remove("active");
   }
+
+  // Root (tonic) selector — transposition in the spirit of ahenk:
+  // perde names and notation stay put, only the sounding pitch moves.
+  const rootRow = document.createElement("div");
+  rootRow.className = "kbd-root";
+  const rootLabel = document.createElement("span");
+  rootLabel.className = "kr-label";
+  rootLabel.textContent = "Root:";
+  rootRow.appendChild(rootLabel);
+  const rootBtns = {};
+  const rootStatus = document.createElement("span");
+  rootStatus.className = "kr-status";
+  function updateRootUI() {
+    ROOT_ORDER.forEach(function (L) {
+      rootBtns[L].classList.toggle("selected", L === root);
+    });
+    rootStatus.textContent = root === writtenRoot
+      ? "tonic sounds at " + soundingTonicName() + " (written pitch)"
+      : "tonic sounds at " + soundingTonicName() + " — transposed " +
+        (offsetCommas() > 0 ? "up " : "down ") +
+        Math.abs(offsetCommas()) + " commas";
+  }
+  ROOT_ORDER.forEach(function (L) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = L === writtenRoot ? L + "·" : L;
+    b.title = L === writtenRoot ? "Written pitch" : "Transpose tonic to " + L;
+    b.addEventListener("click", function () {
+      root = L;
+      try { localStorage.setItem("maqam-root-" + makamKey, L); } catch (e) {}
+      updateRootUI();
+    });
+    rootBtns[L] = b;
+    rootRow.appendChild(b);
+  });
+  rootRow.appendChild(rootStatus);
+  box.parentNode.insertBefore(rootRow, box);
+  updateRootUI();
 
   // Build the on-screen keys.
   notes.forEach(function (n, i) {
