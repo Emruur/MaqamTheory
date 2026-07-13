@@ -180,6 +180,28 @@ button.play.playing::before { content: "\25A0\00a0"; }
 .note-chip.sounding .western { color: var(--accent-soft); }
 .note-chip.tonic { border-width: 3px; }
 
+/* ---- playground makam picker ---- */
+.makam-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.1rem 0;
+}
+.makam-picker button {
+  font: 600 1.02rem Georgia, serif;
+  padding: 0.55rem 1.3rem;
+  border: 1.6px solid var(--accent);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  cursor: pointer;
+}
+.makam-picker button:hover { background: var(--accent-soft); }
+.makam-picker button.selected {
+  background: var(--accent);
+  color: var(--card);
+}
+
 /* ---- keyboard root (transposition) selector ---- */
 .kbd-root {
   display: flex;
@@ -205,6 +227,12 @@ button.play.playing::before { content: "\25A0\00a0"; }
   cursor: pointer;
 }
 .kbd-root button:hover { background: var(--accent-soft); }
+.kbd-root button.kr-oct {
+  border-radius: 999px;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.7rem;
+}
+.kbd-root button.kr-oct:first-of-type { margin-left: 0.4rem; }
 .kbd-root button.selected {
   background: var(--accent);
   color: var(--card);

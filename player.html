@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playground — Makam Theory</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="makam-rast">
+<header class="site">
+  <div class="crumbs"><a href="index.html">Makam Theory</a><span>Playground</span></div>
+</header>
+<main>
+  <h1>Playground</h1>
+  <p class="lede">One instrument, five makams. Switch between them freely to
+  compare their colors from the same keys — the fastest way to feel what
+  changes (and what stays) when the makam changes.</p>
+
+  <h2>Choose a makam</h2>
+  <div class="makam-picker" id="makam-picker"></div>
+
+  <div class="player-row" id="listen-row">
+    <button class="play" id="btn-asc" data-audio="">Ascending scale</button>
+    <button class="play" id="btn-desc" data-audio="">Descending scale</button>
+    <button class="play" id="btn-seyir" data-audio="">Seyir sketch</button>
+    <button class="play" id="btn-song" data-audio="">Song excerpt</button>
+  </div>
+
+  <h2>Play</h2>
+  <p>Home row <strong>A&nbsp;S&nbsp;D&nbsp;F&nbsp;G&nbsp;H&nbsp;J&nbsp;K&nbsp;L&nbsp;;&nbsp;'</strong>
+  plays the makam; the dotted keys on the row above
+  (<strong>Q&nbsp;W&nbsp;E&nbsp;R&nbsp;T&nbsp;…</strong>) are 12-TET piano twins of the
+  microtonal perdeler. Hold to sustain; chords work. The root selector moves the
+  tonic to any natural note in a low or high octave — two full octaves of
+  placement — while perde names stay put, exactly like a real
+  <em class="tr">ahenk</em> change.</p>
+  <div class="kbd-instrument" id="playground-kbd"></div>
+  <p class="kbd-legend">Thick border = tonic · double border = güçlü ·
+  dashed = yeden · dotted gray = piano twin.</p>
+
+  <div class="callout"><span class="label">Comparison ideas</span>
+  Play <strong>S&nbsp;D&nbsp;F&nbsp;G</strong> in Uşşak, then switch to Hicaz and play
+  the same keys — same fingers, different world. Or hold the tonic
+  <strong>S</strong> and walk the second degree across makams: Nihavend's kürdî,
+  Uşşak's segâh, Hicaz's dik kürdî sit 5, 8, and 5-but-different commas up.</div>
+
+  <nav class="pager">
+    <a href="index.html"><span class="dir">Back</span>Contents</a>
+    <a href="chapters/10-comparison-and-practice.html" style="text-align:right"><span class="dir">Related</span>10 · Comparison &amp; Ear Training</a>
+  </nav>
+</main>
+<footer class="site">Makam Theory — a listening course</footer>
+<script src="js/voice.js"></script>
+<script src="js/player.js"></script>
+<script src="js/keyboard.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  const MAKAMS = {
+    rast: {
+      label: "Rast",
+      notes: "26|ırak|y,31|rast|t,40|dügâh|,48|segâh||2,53|çargâh|,62|nevâ|g,71|hüseynî|,75|acem|,79|eviç||9,84|gerdaniye|t,93|muhayyer|",
+    },
+    nihavend: {
+      label: "Nihavend",
+      notes: "26|F♯ yeden|y,31|rast|t,40|dügâh|,44|kürdî|,53|çargâh|,62|nevâ|g,66|nim hisar|,75|acem|,79|eviç|,84|gerdaniye|t,93|muhayyer|",
+    },
+    ussak: {
+      label: "Uşşak",
+      notes: "31|rast|y,40|dügâh|t,48|segâh||2,53|çargâh|,62|nevâ|g,71|hüseynî|,75|acem|,84|gerdaniye|,93|muhayyer|t,101|tiz segâh||14,106|tiz çargâh|",
+    },
+    huseyni: {
+      label: "Hüseyni",
+      notes: "31|rast|y,40|dügâh|t,48|segâh||2,53|çargâh|,62|nevâ|,71|hüseynî|g,79|eviç||9,84|gerdaniye|,93|muhayyer|t,101|tiz segâh||14,106|tiz çargâh|",
+    },
+    hicaz: {
+      label: "Hicaz",
+      notes: "31|rast|y,40|dügâh|t,45|dik kürdî||1,57|nim hicaz||4,62|nevâ|g,71|hüseynî|,79|eviç||9,84|gerdaniye|,93|muhayyer|t,98|tiz dik kürdî||13,106|tiz çargâh|",
+    },
+  };
+
+  const box = document.getElementById("playground-kbd");
+  const picker = document.getElementById("makam-picker");
+  const btns = {};
+
+  function select(key) {
+    document.body.className = "makam-" + key;
+    Object.keys(btns).forEach(function (k) {
+      btns[k].classList.toggle("selected", k === key);
+    });
+    box.dataset.makam = key;
+    box.dataset.notes = MAKAMS[key].notes;
+    window.MaqamKeyboard.mount(box);
+    document.getElementById("btn-asc").dataset.audio =
+      "audio/" + key + "_scale_asc.wav";
+    document.getElementById("btn-desc").dataset.audio =
+      "audio/" + key + "_scale_desc.wav";
+    document.getElementById("btn-seyir").dataset.audio =
+      "audio/" + key + "_seyir.wav";
+    document.getElementById("btn-song").dataset.audio =
+      "audio/song_" + key + ".wav";
+    try { localStorage.setItem("maqam-playground", key); } catch (e) {}
+  }
+
+  Object.keys(MAKAMS).forEach(function (key) {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = MAKAMS[key].label;
+    b.addEventListener("click", function () { select(key); });
+    btns[key] = b;
+    picker.appendChild(b);
+  });
+
+  let start = "rast";
+  try {
+    const saved = localStorage.getItem("maqam-playground");
+    if (saved in MAKAMS) start = saved;
+  } catch (e) {}
+  select(start);
+})();
+</script>
+</body>
+</html>
