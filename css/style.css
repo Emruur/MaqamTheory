@@ -409,6 +409,54 @@ nav.pager .dir {
 .quiz-status { font-size: 0.95rem; color: #574e3e; min-height: 1.4em; }
 .quiz-score { font-weight: 700; color: var(--accent); }
 
+/* Live scale notation on the playground */
+.scale-sheet {
+  margin: 0.9rem 0 1.1rem;
+  padding: 0.7rem 0.9rem 0.4rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+.scale-sheet .ss-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  color: #7c7260;
+  margin-bottom: 0.2rem;
+}
+.scale-sheet .ss-title { font-weight: 700; color: var(--accent); }
+.scale-sheet .ss-mode { margin-left: auto; display: flex; gap: 0.3rem; }
+.scale-sheet .ss-mode button {
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 0.06rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: #6b6252;
+  cursor: pointer;
+}
+.scale-sheet .ss-mode button:hover { background: var(--accent-soft); }
+.scale-sheet .ss-mode button.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.scale-sheet svg { display: block; max-width: 100%; height: auto; }
+.scale-sheet .sn .halo {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 1;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.scale-sheet .sn.on .halo { opacity: 1; }
+.scale-sheet .sn.on .nh { fill: var(--accent); stroke: var(--accent); }
+.scale-sheet .sn.on text { fill: var(--accent); font-weight: 700; }
+
 footer.site {
   text-align: center;
   font-size: 0.82rem;

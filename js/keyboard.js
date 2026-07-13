@@ -140,6 +140,7 @@ window.MaqamKeyboard = (function () {
   let notes = [], keyEls = [], westEls = {};
   let tonicCommas = 40, writtenRoot = "A", makamKey = "x";
   let root = "A", octHigh = false;
+  let noteListener = null;   // fn(writtenCommas, isOn) for makam notes
 
   function baseOffset(letter) {
     // The "low octave" variant: in (-53, 0], so written root maps to 0.
@@ -174,6 +175,9 @@ window.MaqamKeyboard = (function () {
       h.off(ctx.currentTime);
       const el = typeof id === "number" ? keyEls[id] : westEls[+id.slice(1)];
       if (el) el.classList.remove("active");
+      if (typeof id === "number" && noteListener && notes[id]) {
+        noteListener(notes[id].commas, false);
+      }
     });
     active.clear();
   }
@@ -196,10 +200,14 @@ window.MaqamKeyboard = (function () {
   function noteOn(i) {
     if (i >= 0 && i < notes.length) {
       soundOn(i, freqOf(notes[i].commas), keyEls[i]);
+      if (noteListener) noteListener(notes[i].commas, true);
     }
   }
   function noteOff(i) {
-    if (keyEls[i]) soundOff(i, keyEls[i]);
+    if (keyEls[i]) {
+      soundOff(i, keyEls[i]);
+      if (noteListener && notes[i]) noteListener(notes[i].commas, false);
+    }
   }
   function westOn(i) {
     if (notes[i] && notes[i].western !== null && westEls[i]) {
@@ -381,5 +389,8 @@ window.MaqamKeyboard = (function () {
   const auto = document.querySelector(".kbd-instrument[data-notes]");
   if (auto) mount(auto);
 
-  return { mount: mount };
+  return {
+    mount: mount,
+    onNote: function (fn) { noteListener = fn; },
+  };
 })();

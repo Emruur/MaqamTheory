@@ -27,22 +27,10 @@
   </div>
 
   <h2>Play</h2>
-  <p>Home row <strong>A&nbsp;S&nbsp;D&nbsp;F&nbsp;G&nbsp;H&nbsp;J&nbsp;K&nbsp;L&nbsp;;&nbsp;'</strong>
-  plays the makam; the dotted keys on the row above
-  (<strong>Q&nbsp;W&nbsp;E&nbsp;R&nbsp;T&nbsp;…</strong>) are 12-TET piano twins of the
-  microtonal perdeler. Hold to sustain; chords work. The root selector moves the
-  tonic to any natural note in a low or high octave — two full octaves of
-  placement — while perde names stay put, exactly like a real
-  <em class="tr">ahenk</em> change.</p>
+  <div class="scale-sheet" id="scale-sheet"></div>
   <div class="kbd-instrument" id="playground-kbd"></div>
   <p class="kbd-legend">Thick border = tonic · double border = güçlü ·
   dashed = yeden · dotted gray = piano twin.</p>
-
-  <div class="callout"><span class="label">Comparison ideas</span>
-  Play <strong>S&nbsp;D&nbsp;F&nbsp;G</strong> in Uşşak, then switch to Hicaz and play
-  the same keys — same fingers, different world. Or hold the tonic
-  <strong>S</strong> and walk the second degree across makams: Nihavend's kürdî,
-  Uşşak's segâh, Hicaz's dik kürdî sit 5, 8, and 5-but-different commas up.</div>
 
   <nav class="pager">
     <a href="index.html"><span class="dir">Back</span>Contents</a>
@@ -53,6 +41,7 @@
 <script src="js/voice.js"></script>
 <script src="js/player.js"></script>
 <script src="js/keyboard.js"></script>
+<script src="js/notation.js"></script>
 <script>
 (function () {
   "use strict";
@@ -92,6 +81,8 @@
     box.dataset.makam = key;
     box.dataset.notes = MAKAMS[key].notes;
     window.MaqamKeyboard.mount(box);
+    window.MaqamSheet.mount(document.getElementById("scale-sheet"), key,
+                            MAKAMS[key].label);
     document.getElementById("btn-asc").dataset.audio =
       "audio/" + key + "_scale_asc.wav";
     document.getElementById("btn-desc").dataset.audio =
@@ -110,6 +101,10 @@
     b.addEventListener("click", function () { select(key); });
     btns[key] = b;
     picker.appendChild(b);
+  });
+
+  window.MaqamKeyboard.onNote(function (commas, on) {
+    window.MaqamSheet.note(commas, on);
   });
 
   let start = "rast";
