@@ -1,7 +1,10 @@
 /* Computer-keyboard instrument: play the makam's perdeler live.
-   Physical home-row keys (layout-independent event.code) map to scale
-   degrees; Web Audio synthesizes the exact AEU comma pitches. Hold a key
-   to sustain. Three selectable voices: warm synth, breathy ney, plucked oud. */
+   Home-row keys (layout-independent event.code) map to scale degrees;
+   Web Audio synthesizes the exact AEU comma pitches. Hold to sustain.
+   The row above (Q W E R T ...) carries 12-TET "piano twin" keys for the
+   microtonal perdeler only, aligned above their makam counterparts, so the
+   comma differences can be compared directly. Voices follow the site-wide
+   picker; the root selector transposes the whole grid (ahenk-style). */
 
 (function () {
   "use strict";
@@ -9,6 +12,11 @@
   const KEY_CODES = ["KeyA", "KeyS", "KeyD", "KeyF", "KeyG", "KeyH",
                      "KeyJ", "KeyK", "KeyL", "Semicolon", "Quote"];
   const KEY_CAPS = ["A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'"];
+  const TOP_CODES = ["KeyQ", "KeyW", "KeyE", "KeyR", "KeyT", "KeyY",
+                     "KeyU", "KeyI", "KeyO", "KeyP", "BracketLeft"];
+  const TOP_CAPS = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "["];
+  const TET_NAMES = ["A", "B♭", "B", "C", "C♯", "D", "E♭", "E",
+                     "F", "F♯", "G", "G♯"];
 
   const VOICES = {
     warm: {
@@ -28,9 +36,16 @@
   const box = document.querySelector(".kbd-instrument");
   if (!box) return;
 
+  // Entry format: commas|perde|flag|westernSemitone (western only for
+  // microtonal perdeler; semitones from A4 in 12-TET at written pitch).
   const notes = box.dataset.notes.split(",").map(function (s) {
     const parts = s.split("|");
-    return { commas: +parts[0], perde: parts[1], flag: parts[2] || "" };
+    return {
+      commas: +parts[0],
+      perde: parts[1],
+      flag: parts[2] || "",
+      western: parts[3] === undefined || parts[3] === "" ? null : +parts[3],
+    };
   });
 
   /* ---- transposable root (ahenk) ---- */
@@ -41,6 +56,9 @@
   const writtenRoot = Object.keys(NATURALS).find(function (L) {
     return NATURALS[L] === tonicCommas % 53;
   }) || "G";
+  // G-tonic makams transpose only downward from written pitch; A-tonic
+  // makams only upward. Together the five makams span about two octaves.
+  const goesDown = writtenRoot === "G";
   const makamKey = (document.body.className.match(/makam-(\w+)/) || [])[1] || "x";
   let root = writtenRoot;
   try {
@@ -50,8 +68,8 @@
 
   function offsetCommas() {
     let d = NATURALS[root] - (tonicCommas % 53);
-    if (d > 26) d -= 53;
-    if (d <= -26) d += 53;
+    if (goesDown && d > 0) d -= 53;
+    if (!goesDown && d < 0) d += 53;
     return d;
   }
 
@@ -61,11 +79,12 @@
   }
 
   let ctx = null, master = null, noiseBuf = null;
-  const waves = {};           // voice key -> PeriodicWave
-  const active = new Map();   // note index -> handle {off(t)}
-  const keyEls = [];
+  const waves = {};
+  const active = new Map();   // id (number | "w"+number) -> handle
+  const keyEls = [];          // makam keys
+  const westEls = {};         // index -> western key element
 
-  // Follow the site-wide voice picker (js/voice.js). "oud" maps to pluck.
+  // Follow the site-wide voice picker (js/voice.js).
   let voice = "warm";
   if (window.MaqamVoice) {
     voice = window.MaqamVoice.get();
@@ -100,7 +119,12 @@
     return 440 * Math.pow(2, (commas + offsetCommas() - 40) / 53);
   }
 
-  /* Each starter returns a handle with off(t) that releases and cleans up. */
+  function westernFreqOf(semitones) {
+    // The piano twin, moved by the same ratio as the root transposition,
+    // so the comma-sized gap to its makam neighbour is preserved.
+    return 440 * Math.pow(2, semitones / 12) *
+           Math.pow(2, offsetCommas() / 53);
+  }
 
   function startWarm(f, t) {
     const osc = ctx.createOscillator();
@@ -119,14 +143,12 @@
     const osc = ctx.createOscillator();
     osc.setPeriodicWave(waves.ney);
     osc.frequency.value = f;
-    // Delayed vibrato.
     const lfo = ctx.createOscillator();
     lfo.frequency.value = 4.8;
     const depth = ctx.createGain();
     depth.gain.setValueAtTime(0, t);
     depth.gain.linearRampToValueAtTime(f * 0.004, t + 0.6);
     lfo.connect(depth).connect(osc.frequency);
-    // Breath: band-passed noise around the second partial.
     const noise = ctx.createBufferSource();
     noise.buffer = noiseBuf;
     noise.loop = true;
@@ -138,7 +160,6 @@
     ng.gain.setValueAtTime(0.0001, t);
     ng.gain.exponentialRampToValueAtTime(0.035, t + 0.12);
     noise.connect(bp).connect(ng).connect(master);
-    // Slow, swelling body.
     const g = ctx.createGain();
     g.gain.setValueAtTime(0.0001, t);
     g.gain.exponentialRampToValueAtTime(0.26, t + 0.09);
@@ -155,7 +176,6 @@
     const osc = ctx.createOscillator();
     osc.setPeriodicWave(waves.pluck);
     osc.frequency.value = f;
-    // Darkening filter: bright attack, mellow tail, like a plucked string.
     const lp = ctx.createBiquadFilter();
     lp.type = "lowpass";
     lp.frequency.setValueAtTime(Math.min(f * 9, 7500), t);
@@ -178,23 +198,39 @@
 
   const STARTERS = { warm: startWarm, ney: startNey, pluck: startPluck };
 
-  function noteOn(i) {
-    if (i < 0 || i >= notes.length || active.has(i)) return;
+  function soundOn(id, freq, el) {
+    if (active.has(id)) return;
     ensureAudio();
-    active.set(i, STARTERS[voice](freqOf(notes[i].commas), ctx.currentTime));
-    keyEls[i].classList.add("active");
+    active.set(id, STARTERS[voice](freq, ctx.currentTime));
+    el.classList.add("active");
   }
 
-  function noteOff(i) {
-    const h = active.get(i);
+  function soundOff(id, el) {
+    const h = active.get(id);
     if (!h) return;
-    active.delete(i);
+    active.delete(id);
     h.off(ctx.currentTime);
-    keyEls[i].classList.remove("active");
+    el.classList.remove("active");
   }
 
-  // Root (tonic) selector — transposition in the spirit of ahenk:
-  // perde names and notation stay put, only the sounding pitch moves.
+  function noteOn(i) {
+    if (i >= 0 && i < notes.length) {
+      soundOn(i, freqOf(notes[i].commas), keyEls[i]);
+    }
+  }
+  function noteOff(i) {
+    if (keyEls[i]) soundOff(i, keyEls[i]);
+  }
+  function westOn(i) {
+    if (notes[i] && notes[i].western !== null) {
+      soundOn("w" + i, westernFreqOf(notes[i].western), westEls[i]);
+    }
+  }
+  function westOff(i) {
+    if (westEls[i]) soundOff("w" + i, westEls[i]);
+  }
+
+  /* ---- root selector UI ---- */
   const rootRow = document.createElement("div");
   rootRow.className = "kbd-root";
   const rootLabel = document.createElement("span");
@@ -218,7 +254,8 @@
     const b = document.createElement("button");
     b.type = "button";
     b.textContent = L === writtenRoot ? L + "·" : L;
-    b.title = L === writtenRoot ? "Written pitch" : "Transpose tonic to " + L;
+    b.title = L === writtenRoot ? "Written pitch"
+      : "Transpose tonic " + (goesDown ? "down" : "up") + " to " + L;
     b.addEventListener("click", function () {
       root = L;
       try { localStorage.setItem("maqam-root-" + makamKey, L); } catch (e) {}
@@ -231,39 +268,70 @@
   box.parentNode.insertBefore(rootRow, box);
   updateRootUI();
 
-  // Build the on-screen keys.
+  /* ---- on-screen keys: columns with optional piano twin on top ---- */
+  function bindPress(el, on, off) {
+    el.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      el.setPointerCapture(e.pointerId);
+      on();
+    });
+    ["pointerup", "pointercancel"].forEach(function (ev) {
+      el.addEventListener(ev, off);
+    });
+  }
+
+  const hasWestern = notes.some(function (n) { return n.western !== null; });
   notes.forEach(function (n, i) {
+    const col = document.createElement("div");
+    col.className = "kbd-col";
+    if (n.western !== null) {
+      const w = document.createElement("div");
+      w.className = "kbd-key western";
+      const name = TET_NAMES[((n.western % 12) + 12) % 12] +
+                   (n.western >= 12 ? "′" : "");
+      w.innerHTML = '<span class="cap">' + (TOP_CAPS[i] || "·") + "</span>" +
+        '<span class="perde">piano ' + name + "</span>";
+      bindPress(w, function () { westOn(i); }, function () { westOff(i); });
+      westEls[i] = w;
+      col.appendChild(w);
+    }
     const k = document.createElement("div");
     k.className = "kbd-key" +
       (n.flag === "t" ? " tonic" : n.flag === "g" ? " guclu" :
        n.flag === "y" ? " yeden" : "");
     k.innerHTML = '<span class="cap">' + (KEY_CAPS[i] || "·") + "</span>" +
       '<span class="perde">' + n.perde + "</span>";
-    k.addEventListener("pointerdown", function (e) {
-      e.preventDefault();
-      k.setPointerCapture(e.pointerId);
-      noteOn(i);
-    });
-    ["pointerup", "pointercancel"].forEach(function (ev) {
-      k.addEventListener(ev, function () { noteOff(i); });
-    });
-    box.appendChild(k);
+    bindPress(k, function () { noteOn(i); }, function () { noteOff(i); });
+    col.appendChild(k);
+    box.appendChild(col);
     keyEls.push(k);
   });
+  if (hasWestern) box.classList.add("has-western");
 
   document.addEventListener("keydown", function (e) {
     if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
-    const i = KEY_CODES.indexOf(e.code);
+    let i = KEY_CODES.indexOf(e.code);
     if (i >= 0 && i < notes.length) {
       e.preventDefault();
       noteOn(i);
+      return;
+    }
+    i = TOP_CODES.indexOf(e.code);
+    if (i >= 0 && i < notes.length && notes[i].western !== null) {
+      e.preventDefault();
+      westOn(i);
     }
   });
   document.addEventListener("keyup", function (e) {
-    const i = KEY_CODES.indexOf(e.code);
-    if (i >= 0) noteOff(i);
+    let i = KEY_CODES.indexOf(e.code);
+    if (i >= 0) { noteOff(i); return; }
+    i = TOP_CODES.indexOf(e.code);
+    if (i >= 0) westOff(i);
   });
   window.addEventListener("blur", function () {
-    Array.from(active.keys()).forEach(noteOff);
+    Array.from(active.keys()).forEach(function (id) {
+      if (typeof id === "number") noteOff(id);
+      else westOff(+id.slice(1));
+    });
   });
 })();
